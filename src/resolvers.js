@@ -1,16 +1,17 @@
 
-const deepmerge = require('deepmerge')
-const operatorResolver = require('./graphql/resolver/operatorResolver')
-const customerResolver = require('./graphql/resolver/customerResolver')
-const userResolver = require('./graphql/resolver/userResolver')
-const subscriptionResolver = require('./graphql/resolver/subscriptionResolver')
-const adminResolver = require('./graphql/resolver/adminResolver')
-const dailysurveyResolver = require('./graphql/resolver/dailysurveyResolver')
-const projectResolver = require('./graphql/resolver/projectResolver')
-const protocolResolver = require('./graphql/resolver/protocolResolver')
-const sessionResolver = require('./graphql/resolver/sessionResolver')
-const treatmentResolver = require('./graphql/resolver/treatmentResolver')
-const transactionResolver = require('./graphql/resolver/transactionResolver')
+import deepmerge from 'deepmerge';
+import operatorResolver from './graphql/resolver/operatorResolver.js';
+import customerResolver from './graphql/resolver/customerResolver.js';
+import userResolver from './graphql/resolver/userResolver.js';
+import subscriptionResolver from './graphql/resolver/subscriptionResolver.js';
+import adminResolver from './graphql/resolver/adminResolver.js';
+import dailysurveyResolver from './graphql/resolver/dailysurveyResolver.js';
+import projectResolver from './graphql/resolver/projectResolver.js';
+import protocolResolver from './graphql/resolver/protocolResolver.js';
+import sessionResolver from './graphql/resolver/sessionResolver.js';
+import treatmentResolver from './graphql/resolver/treatmentResolver.js';
+import transactionResolver from './graphql/resolver/transactionResolver.js';
+import singleUploadResolver from './graphql/resolver/singleUploadResolver.js';
 
 const resolvers = deepmerge.all([
     operatorResolver,
@@ -24,6 +25,8 @@ const resolvers = deepmerge.all([
     sessionResolver,
     treatmentResolver,
     transactionResolver,
-])
+    singleUploadResolver,
+]);
 
-module.exports = resolvers
+export default resolvers;
+// module.exports = resolvers

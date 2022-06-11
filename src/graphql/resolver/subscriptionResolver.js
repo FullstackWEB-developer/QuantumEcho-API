@@ -1,5 +1,5 @@
 
-var ObjectId = require('mongodb').ObjectId
+import { ObjectId } from 'mongodb';
 
 const subscriptionResolver = {
     Query: {
@@ -46,4 +46,5 @@ const subscriptionResolver = {
     }
 }
 
-module.exports = subscriptionResolver
+export default subscriptionResolver;
+// module.exports = subscriptionResolver

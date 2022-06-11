@@ -1,5 +1,5 @@
 
-var ObjectId = require('mongodb').ObjectId
+import { ObjectId } from 'mongodb';
 
 const adminResolver = {
     Query: {
@@ -46,4 +46,5 @@ const adminResolver = {
     }
 }
 
-module.exports = adminResolver
+export default adminResolver;
+// module.exports = adminResolver

@@ -1,5 +1,6 @@
 
-var ObjectId = require('mongodb').ObjectId
+// var ObjectId = require('mongodb').ObjectId
+import { ObjectId } from 'mongodb';
 
 const operatorResolver = {
     Query: {
@@ -46,4 +47,5 @@ const operatorResolver = {
     }
 }
 
-module.exports = operatorResolver
+export default operatorResolver;
+// module.exports = operatorResolver

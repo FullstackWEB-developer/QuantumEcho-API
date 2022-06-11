@@ -1,5 +1,5 @@
 
-var ObjectId = require('mongodb').ObjectId
+import { ObjectId } from 'mongodb';
 
 const dailysurveyResolver = {
     Query: {
@@ -46,4 +46,5 @@ const dailysurveyResolver = {
     }
 }
 
-module.exports = dailysurveyResolver
+export default dailysurveyResolver;
+// module.exports = dailysurveyResolver

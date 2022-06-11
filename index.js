@@ -1,19 +1,27 @@
-const { ApolloServer, gql } = require('apollo-server-express');
-const { ApolloServerPluginDrainHttpServer } = require('apollo-server-core');
-const http = require('http');
-const express = require('express');
-const cors = require('cors');
+// const { ApolloServer, gql } = require('apollo-server-express');
+import {ApolloServer} from 'apollo-server-express';
+import { ApolloServerPluginDrainHttpServer } from 'apollo-server-core';
+import graphqlUploadExpress from 'graphql-upload/graphqlUploadExpress.js';
+import http from 'http';
+import express from 'express';
+import cors from 'cors';
+import bodyParser from 'body-parser';
 
-const {MongoClient } = require('mongodb');
-require('dotenv').config();
+import { MongoClient } from 'mongodb';
+import dotenv from 'dotenv';
+// require('dotenv').config();
 
-const typeDefs = require('./src/typeDefs');
-const resolvers = require('./src/resolvers');
+import resolvers from './src/resolvers.js';
+import typeDefs from './src/typeDefs.js';
 
 const app = express();
 
 app.use(cors());
-app.use(express.json());
+// app.use(express.json());
+app.use(graphqlUploadExpress());
+app.use(bodyParser.urlencoded({ extended: false }))
+
+dotenv.config();
 
 const httpServer = http.createServer(app);
 
@@ -25,26 +33,35 @@ const startApolloServer = async(app, httpServer) => {
     { useNewUrlParser: true, useUnifiedTopology: true}
   )
   const db = client.db()
-  const context = {db}
+  // const context = {db}
 
   const server = new ApolloServer({
     typeDefs,
     resolvers,
     csrfPrevention: true,
-    context,
     plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
+    context:({req}) => {
+      const access_token = req.headers.authorization || '';
+      if (access_token !== '') {
+        throw new AuthenticationError('you must be logged in');
+      }else{
+
+      }
+      return {db}
+    },
   });
 
   await server.start();
   server.applyMiddleware({ app });
 
-  app.listen({ port: process.env.PORT || 8080 }, () =>
-   console.log(`🚀 Server ready at http://localhost:8080${server.graphqlPath}`)
+  app.listen({ port: process.env.PORT }, () =>
+    console.log(`🚀 Server ready at http://localhost:${process.env.PORT}${server.graphqlPath}`)
   );
 }
 
 startApolloServer(app, httpServer);
 
-module.exports = httpServer
+export default httpServer
+// module.exports = httpServer
 
 

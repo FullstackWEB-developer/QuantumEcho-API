@@ -1,4 +1,5 @@
-const {gql} = require('apollo-server-express')
+
+import { gql } from 'apollo-server-express'
 
 const typeDefs = gql`
 type ContactInfo{
@@ -20,4 +21,6 @@ input ContactInfoInput{
     phoneNumber:String
 }
 `
-module.exports = typeDefs
+
+export default typeDefs
+// module.exports = typeDefs

@@ -1,5 +1,5 @@
 
-var ObjectId = require('mongodb').ObjectId
+import { ObjectId } from 'mongodb';
 
 const protocolResolver = {
     Query: {
@@ -46,4 +46,5 @@ const protocolResolver = {
     }
 }
 
-module.exports = protocolResolver
+export default protocolResolver;
+// module.exports = protocolResolver

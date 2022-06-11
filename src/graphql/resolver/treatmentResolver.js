@@ -1,5 +1,5 @@
 
-var ObjectId = require('mongodb').ObjectId
+import { ObjectId } from 'mongodb';
 
 const treatmentResolver = {
     Query: {
@@ -46,4 +46,5 @@ const treatmentResolver = {
     }
 }
 
-module.exports = treatmentResolver
+export default treatmentResolver;
+// module.exports = treatmentResolver

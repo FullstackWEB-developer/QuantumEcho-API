@@ -2,11 +2,11 @@
   "name": "quantumecho-api",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "",
+  "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node index.js",
-    "dev": "nodemon -e js,json"
+    "start": "nodemon -e js,json"
   },
   "keywords": [],
   "author": "",
@@ -17,8 +17,10 @@
     "cors": "^2.8.5",
     "deepmerge": "^4.2.2",
     "dotenv": "^16.0.1",
+    "esm": "^3.2.25",
     "express": "^4.18.1",
     "graphql": "^16.5.0",
+    "graphql-upload": "^15.0.1",
     "mongodb": "^4.7.0",
     "nodemon": "^2.0.16"
   }

@@ -1,19 +1,20 @@
 
-const operatortypeDefs = require('./graphql/typeDefs/operatortypeDefs')
-const contactInfotypeDefs = require('./graphql/typeDefs/contactInfotypeDefs')
-const subscriptiontypeDefs = require('./graphql/typeDefs/subscriptiontypeDefs')
-const moduletypeDefs = require('./graphql/typeDefs/moduletypeDefs')
-const customertypeDefs = require('./graphql/typeDefs/customertypeDefs')
-const dailySurveytypeDefs = require('./graphql/typeDefs/dailySurveytypeDefs')
-const projecttypeDefs = require('./graphql/typeDefs/projecttypeDefs')
-const sessiontypeDefs = require('./graphql/typeDefs/sessiontypeDefs')
-const treatmenttypeDefs = require('./graphql/typeDefs/treatmenttypeDefs')
-const protocotypeDefs = require('./graphql/typeDefs/protocoltypeDefs')
-const messagetypeDefs = require('./graphql/typeDefs/messagetypeDefs')
-const usertypeDefs = require('./graphql/typeDefs/usertypeDefs')
-const addresstypeDefs = require('./graphql/typeDefs/addresstypeDefs')
-const admintypeDefs = require('./graphql/typeDefs/admintypeDefs')
-const transactiontypeDefs = require('./graphql/typeDefs/transactiontypeDefs')
+import operatortypeDefs from './graphql/typeDefs/operatortypeDefs.js'
+import contactInfotypeDefs from './graphql/typeDefs/contactInfotypeDefs.js'
+import subscriptiontypeDefs from './graphql/typeDefs/subscriptiontypeDefs.js'
+import moduletypeDefs from './graphql/typeDefs/moduletypeDefs.js'
+import customertypeDefs from './graphql/typeDefs/customertypeDefs.js'
+import dailySurveytypeDefs from './graphql/typeDefs/dailySurveytypeDefs.js'
+import projecttypeDefs from './graphql/typeDefs/projecttypeDefs.js'
+import sessiontypeDefs from './graphql/typeDefs/sessiontypeDefs.js'
+import treatmenttypeDefs from './graphql/typeDefs/treatmenttypeDefs.js'
+import protocotypeDefs from './graphql/typeDefs/protocoltypeDefs.js'
+import messagetypeDefs from './graphql/typeDefs/messagetypeDefs.js'
+import usertypeDefs from './graphql/typeDefs/usertypeDefs.js'
+import addresstypeDefs from './graphql/typeDefs/addresstypeDefs.js'
+import admintypeDefs from './graphql/typeDefs/admintypeDefs.js'
+import transactiontypeDefs from './graphql/typeDefs/transactiontypeDefs.js'
+import singleUploadtypeDefs from './graphql/typeDefs/singleUploadtypeDefs.js'
 
 const typeDefs = [
     operatortypeDefs,
@@ -31,6 +32,8 @@ const typeDefs = [
     addresstypeDefs,
     admintypeDefs,
     transactiontypeDefs,
+    singleUploadtypeDefs,
 ]
 
-module.exports = typeDefs
+export default typeDefs
+// module.exports = typeDefs

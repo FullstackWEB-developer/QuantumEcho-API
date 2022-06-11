@@ -1,5 +1,5 @@
 
-var ObjectId = require('mongodb').ObjectId
+import { ObjectId } from 'mongodb';
 
 const sessionResolver = {
     Query: {
@@ -46,4 +46,5 @@ const sessionResolver = {
     }
 }
 
-module.exports = sessionResolver
+export default sessionResolver;
+// module.exports = sessionResolver
