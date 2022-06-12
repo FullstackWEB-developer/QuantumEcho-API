@@ -18,7 +18,7 @@ const app = express();
 
 app.use(cors());
 // app.use(express.json());
-app.use(graphqlUploadExpress());
+app.use(graphqlUploadExpress({maxFieldSize:1024*1000*10, maxFiles:1}));
 app.use(bodyParser.urlencoded({ extended: false }))
 
 dotenv.config();
@@ -41,14 +41,15 @@ const startApolloServer = async(app, httpServer) => {
     csrfPrevention: true,
     plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
     context:({req}) => {
-      const access_token = req.headers.authorization || '';
-      if (access_token !== '') {
-        throw new AuthenticationError('you must be logged in');
-      }else{
+      // const access_token = req.headers.authorization || '';
+      // if (access_token !== '') {
+      //   throw new AuthenticationError('you must be logged in');
+      // }else{
 
-      }
+      // }
       return {db}
     },
+    uploads: {maxFieldSize:10000},
   });
 
   await server.start();

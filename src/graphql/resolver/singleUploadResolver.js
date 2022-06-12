@@ -1,4 +1,4 @@
-// import GraphQLUpload from 'graphql-upload/GraphQLUpload.js';
+import GraphQLUpload from 'graphql-upload/GraphQLUpload.js';
 import { finished } from 'stream/promises';
 import { ObjectId } from 'mongodb';
 import fs from 'fs';
@@ -6,17 +6,27 @@ import path from 'path';
 
 
 const singleUploadResolver = {
-    // Upload: GraphQLUpload,
+    Upload: GraphQLUpload,
     Mutation: {
         async singleUpload(parent, args, { db }) {
-            console.log("🚀 ~ file: singleUploadResolver.js ~ line 12 ~ singleUpload ~ args", args.file)
-            const { createReadStream, filename, mimetype, encording } = await args.file
-            console.log("🚀 ~ file: singleUploadResolver.js ~ line 14 ~ filename", filename)
+            const filename = args.filename
+            const base64Data = args.base64Str.replace("data:"+args.type+";base64,", "")
+            const pathName = path.join(path.resolve(), `/public/images/${args.filename}`)
 
-            const stream = createReadStream()      
-            // fs.mkdirSync(path.join(__dirname, 'files'), { recursive: true });
-            const pathName = path.join(__dirname, `/public/images/${filename}`)
-            await stream.pipe(fs.createWriteStream(pathName))
+            fs.writeFile(pathName, base64Data, 'base64', (err) => {
+              console.log(err);
+            });
+
+            // const pathName = path.join(path.resolve(), `/public/images/out.png`)
+            // await fs.writeFileSync(pathName, base64Data, 'base64')
+            
+            // const { createReadStream, filename, mimetype, encording } = await file
+            // console.log("🚀 ~ file: singleUploadResolver.js ~ line 14 ~ filename", filename)
+
+            // const stream = createReadStream()      
+            // // fs.mkdirSync(path.join(__dirname, 'files'), { recursive: true });
+            // const pathName = path.join(__dirname, `/public/images/${filename}`)
+            // await stream.pipe(fs.createWriteStream(pathName))
       
         //   const output = fs.createWriteStream(
         //     path.join(
@@ -40,7 +50,7 @@ const singleUploadResolver = {
         //     });
         //   });
       
-          return { filename:pathName, mimetype, encoding };
+          return { filename:`/public/images/${args.filename}` };
         },
       },
 }

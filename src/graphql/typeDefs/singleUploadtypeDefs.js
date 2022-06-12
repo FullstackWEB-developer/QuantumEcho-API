@@ -6,8 +6,6 @@ const typeDefs = gql`
 
   type File {
     filename: String!
-    mimetype: String!
-    encoding: String!
   }
 
   type Query {
@@ -15,7 +13,7 @@ const typeDefs = gql`
   }
 
   type Mutation {
-    singleUpload(file: Upload!): File!
+    singleUpload(base64Str: String!, _id:String!, filename:String!, type:String!): File!
   }
 `;
 
