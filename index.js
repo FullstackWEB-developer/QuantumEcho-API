@@ -16,10 +16,15 @@ import typeDefs from './src/typeDefs.js';
 
 const app = express();
 
-app.use(cors());
+app.use(
+  cors(),
+  express.json(),
+  graphqlUploadExpress({maxFieldSize:1024*1000*10, maxFiles:1}),
+  bodyParser.json()
+);
 // app.use(express.json());
-app.use(graphqlUploadExpress({maxFieldSize:1024*1000*10, maxFiles:1}));
-app.use(bodyParser.urlencoded({ extended: false }))
+// app.use(graphqlUploadExpress({maxFieldSize:1024*1000*10, maxFiles:1}));
+// app.use(bodyParser.urlencoded({ extended: false }))
 
 dotenv.config();
 
@@ -47,7 +52,7 @@ const startApolloServer = async(app, httpServer) => {
       // }else{
 
       // }
-      return {db}
+      return {db, req}
     },
     uploads: {maxFieldSize:10000},
   });

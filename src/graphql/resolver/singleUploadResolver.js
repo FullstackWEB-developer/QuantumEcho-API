@@ -8,10 +8,11 @@ import path from 'path';
 const singleUploadResolver = {
     Upload: GraphQLUpload,
     Mutation: {
-        async singleUpload(parent, args, { db }) {
+        async singleUpload(parent, args, { db, req }) {
+            // console.log("🚀 ~ file: singleUploadResolver.js ~ line 12 ~ singleUpload ~ req", req)
             const filename = args.filename
             const base64Data = args.base64Str.replace("data:"+args.type+";base64,", "")
-            const pathName = path.join(path.resolve(), `/public/images/${args.filename}`)
+            const pathName = path.join(path.resolve(), `/public/images/${filename}`)
 
             fs.writeFile(pathName, base64Data, 'base64', (err) => {
               console.log(err);
@@ -49,7 +50,7 @@ const singleUploadResolver = {
         //       reject(err);
         //     });
         //   });
-      
+            
           return { filename:`/public/images/${args.filename}` };
         },
       },
