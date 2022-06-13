@@ -10,13 +10,13 @@ type Operator{
   dateOfBirth:String  
   contactInfo:ContactInfo
   profileImage:String
-  bioSex:Sex
+  bioSex:String
   email:String
   activity:String
   company:String
-  store:[Subscription]
-  customers:[Customer]
-  protocols:[Protocol]
+  store:[String]
+  customers:[String]
+  protocols:[String]
   kingdom:String
   species:String
 }
@@ -28,13 +28,13 @@ input OperatorInput{
   dateOfBirth:String  
   contactInfo:ContactInfoInput
   profileImage:String
-  bioSex:Sex
+  bioSex:String
   email:String
   activity:String
   company:String
-  store:[SubscriptionInput]
-  customers:[CustomerInput]
-  protocols:[ProtocolInput]
+  store:[String]
+  customers:[String]
+  protocols:[String]
   kingdom:String
   species:String
 }

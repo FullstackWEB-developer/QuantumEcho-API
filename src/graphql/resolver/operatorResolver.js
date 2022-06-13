@@ -1,6 +1,8 @@
 
 // var ObjectId = require('mongodb').ObjectId
 import { ObjectId } from 'mongodb';
+import fs from 'fs';
+import path from 'path';
 
 const operatorResolver = {
     Query: {
@@ -26,11 +28,40 @@ const operatorResolver = {
           }
           return {message:"A problem occurred during creation."}
         },
-        async updateOperator(parent, args, {db}) {
+        async updateOperator(parent, args, {db}) {          
           const updateOperator = {
             ...args.input,
           }
-          const result = await db.collection(`Operator`).update({_id:ObjectId(args._id)}, {$set:updateOperator})
+          console.log("🚀 ~ file: operatorResolver.js ~ line 34 ~ updateOperator ~ updateOperator", updateOperator)
+          let newOperator
+          let _path = path.join(path.resolve(), updateOperator.profileImage)
+          if (fs.existsSync(_path)) {
+            var fileName = path.basename(_path)
+            console.log("🚀 ~ file: operatorResolver.js ~ line 38 ~ updateOperator ~ fileName", fileName)
+            let fileType = path.extname(fileName)
+            console.log("🚀 ~ file: operatorResolver.js ~ line 40 ~ updateOperator ~ fileType", fileType)
+            const newFileName = args._id + fileType
+            console.log("🚀 ~ file: operatorResolver.js ~ line 42 ~ updateOperator ~ newFileName", newFileName)
+            var newPath = path.join(path.resolve(), `public/uploads/${newFileName}`)
+            console.log("🚀 ~ file: operatorResolver.js ~ line 44 ~ updateOperator ~ newPath", newPath)
+            newOperator = {
+              ...updateOperator,
+              profileImage:`/public/uploads/${newFileName}`,
+            }
+            fs.rename(_path, newPath, function (err) {
+              if (err) throw err
+              // delete temp directory
+              fs.rm(path.dirname(_path), { recursive: true }, (err) => {
+              if (err) console.log("🚀 ~ file: operatorResolver.js ~ line 50 ~ fs.rmdir ~ err", err)
+              });
+              
+            })
+          }else{
+            
+          }
+          console.log("🚀 ~ file: operatorResolver.js ~ line 54 ~ newOperator", newOperator)
+
+          const result = await db.collection(`Operator`).update({_id:ObjectId(args._id)}, {$set:newOperator})
           if (result.writeError){
             return {message:result.writeError}
           }

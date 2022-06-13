@@ -20,11 +20,9 @@ app.use(
   cors(),
   express.json(),
   graphqlUploadExpress({maxFieldSize:1024*1000*10, maxFiles:1}),
-  bodyParser.json()
+  bodyParser.json(),
+  express.static('./')
 );
-// app.use(express.json());
-// app.use(graphqlUploadExpress({maxFieldSize:1024*1000*10, maxFiles:1}));
-// app.use(bodyParser.urlencoded({ extended: false }))
 
 dotenv.config();
 
@@ -43,7 +41,7 @@ const startApolloServer = async(app, httpServer) => {
   const server = new ApolloServer({
     typeDefs,
     resolvers,
-    csrfPrevention: true,
+    csrfPrevention: false,
     plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
     context:({req}) => {
       // const access_token = req.headers.authorization || '';
