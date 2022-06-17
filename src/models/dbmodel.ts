@@ -1,0 +1,28 @@
+import { getModelForClass } from '@typegoose/typegoose';
+import admin from './admin';
+import customer from './customer';
+import dailySurvey from './dailySurvey';
+import evaluation from './evaluation';
+import module from './module';
+import operator from './operator';
+import project from './project';
+import protocol from './protocol';
+import session from './session';
+import subscription from './subscription';
+import transaction from './transaction';
+import treatment from './treatment';
+import treatmentSurvey from './treatmentSurvey';
+
+export const AdminModel = getModelForClass(admin);
+export const CustomerModel = getModelForClass(customer);
+export const DailySurveyModel = getModelForClass(dailySurvey);
+export const EvaluationModel = getModelForClass(evaluation);
+export const ModuleModel = getModelForClass(module);
+export const OperatorModel = getModelForClass(operator);
+export const ProjectModel = getModelForClass(project);
+export const ProtocolModel = getModelForClass(protocol);
+export const SessionModel = getModelForClass(session);
+export const SubscriptionModel = getModelForClass(subscription);
+export const TransactionModel = getModelForClass(transaction);
+export const TreatmentModel = getModelForClass(treatment);
+export const TreatmentSurveyModel = getModelForClass(treatmentSurvey);
