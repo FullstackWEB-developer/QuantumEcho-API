@@ -28,7 +28,6 @@
     "express-graphql": "^0.12.0",
     "graphql": "^15.8.0",
     "graphql-tools": "^8.2.12",
-    "graphql-upload": "^15.0.1",
     "mongoose": "^6.3.3"
   }
 }
