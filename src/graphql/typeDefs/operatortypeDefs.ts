@@ -15,9 +15,9 @@ type Operator{
   company:String
   kingdom:String
   species:String
-  # store:[String]
-  # customers:[String]
-  # protocols:[String]
+  store:[String]
+  customers:[String]
+  protocols:[String]
 }
 
 input OperatorInput{
@@ -34,9 +34,9 @@ input OperatorInput{
   company:String
   kingdom:String
   species:String
-  # store:[String]
-  # customers:[String]
-  # protocols:[String]
+  store:[String]
+  customers:[String]
+  protocols:[String]
 }
 
 enum Sex {

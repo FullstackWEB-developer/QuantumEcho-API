@@ -1,22 +1,27 @@
 import { AdminModel } from "../../models/dbmodel";
+const global = require('../../global');
 
 const adminResolver = {
     Query: {
-      async adminCount (_parent: any, _args: any) {
+      async adminCount (_parent: any, _args: any, { headers }: any) {
+        await global.isAuthorization(headers);
         const count = await AdminModel.countDocuments(_args);
         return count;
       },
-      async admins (_parent: any, _args: any) {
+      async admins (_parent: any, _args: any, { headers }: any) {
+        await global.isAuthorization(headers);
         const lists = await AdminModel.find();
         return lists;
       },
-      async admin (_parent: any, _args: any) {
+      async admin (_parent: any, _args: any, { headers }: any) {
+        await global.isAuthorization(headers);
         const result = await AdminModel.findOne({_id: _args._id});
         return result;
       }
     },
     Mutation: {
-        async postAdmin(_parent: any, _args: any) {
+        async postAdmin(_parent: any, _args: any, { headers }: any) {
+          await global.isAuthorization(headers);
           const newData = {
             ..._args.input,
           }
@@ -30,7 +35,8 @@ const adminResolver = {
           });
           return result;
         },
-        async updateAdmin(_parent: any, _args: any) {
+        async updateAdmin(_parent: any, _args: any, { headers }: any) {
+          await global.isAuthorization(headers);
           const updateData = {
             ..._args.input,
           }
@@ -43,7 +49,8 @@ const adminResolver = {
           });
           return results;
         },
-        async deleteAdmin(_parent: any, _args: any) {
+        async deleteAdmin(_parent: any, _args: any, { headers }: any) {
+          await global.isAuthorization(headers);
           let results;
           await AdminModel.findOneAndDelete({_id:_args._id})
           .then((result) => {

@@ -1,22 +1,27 @@
 import {TransactionModel} from "../../models/dbmodel";
+const global = require('../../global');
 
 const transactionResolver = {
     Query: {
-      async transactionCount (_parent: any, _args: any) {
+      async transactionCount (_parent: any, _args: any, { headers }: any) {
+        await global.isAuthorization(headers);
         const count = await TransactionModel.countDocuments(_args);
         return count;
       },
-      async transactions (_parent: any, _args: any) {
+      async transactions (_parent: any, _args: any, { headers }: any) {
+        await global.isAuthorization(headers);
         const lists = await TransactionModel.find();
         return lists;
       },
-      async transaction (_parent: any, _args: any) {
+      async transaction (_parent: any, _args: any, { headers }: any) {
+        await global.isAuthorization(headers);
         const result = await TransactionModel.findOne({_id: _args._id});
         return result;
       }
     },
     Mutation: {
-        async postTransaction(_parent: any, _args: any) {
+        async postTransaction(_parent: any, _args: any, { headers }: any) {
+        await global.isAuthorization(headers);
           const newData = {
             ..._args.input,
           }
@@ -30,7 +35,8 @@ const transactionResolver = {
           });
           return result;
         },
-        async updateTransaction(_parent: any, _args: any) {
+        async updateTransaction(_parent: any, _args: any, { headers }: any) {
+        await global.isAuthorization(headers);
           const updateData = {
             ..._args.input,
           }
@@ -43,7 +49,8 @@ const transactionResolver = {
           });
           return results;
         },
-        async deleteTransaction(_parent: any, _args: any) {
+        async deleteTransaction(_parent: any, _args: any, { headers }: any) {
+        await global.isAuthorization(headers);
           let results;
           await TransactionModel.findOneAndDelete({_id:_args._id})
           .then((result) => {

@@ -1,22 +1,27 @@
 import {ProjectModel} from "../../models/dbmodel";
+const global = require('../../global');
 
 const projectResolver = {
     Query: {
-      async projectCount (_parent: any, _args: any) {
+      async projectCount (_parent: any, _args: any, { headers }: any) {
+        await global.isAuthorization(headers);
         const count = await ProjectModel.countDocuments(_args);
         return count;
       },
-      async projects (_parent: any, _args: any) {
+      async projects (_parent: any, _args: any, { headers }: any) {
+        await global.isAuthorization(headers);
         const lists = await ProjectModel.find();
         return lists;
       },
-      async project (_parent: any, _args: any) {
+      async project (_parent: any, _args: any, { headers }: any) {
+        await global.isAuthorization(headers);
         const result = await ProjectModel.findOne({_id: _args._id});
         return result;
       }
     },
     Mutation: {
-        async postProject(_parent: any, _args: any) {
+        async postProject(_parent: any, _args: any, { headers }: any) {
+        await global.isAuthorization(headers);
           const newData = {
             ..._args.input,
           }
@@ -30,7 +35,8 @@ const projectResolver = {
           });
           return result;
         },
-        async updateProject(_parent: any, _args: any) {
+        async updateProject(_parent: any, _args: any, { headers }: any) {
+        await global.isAuthorization(headers);
           const updateData = {
             ..._args.input,
           }
@@ -43,7 +49,8 @@ const projectResolver = {
           });
           return results;
         },
-        async deleteProject(_parent: any, _args: any) {
+        async deleteProject(_parent: any, _args: any, { headers }: any) {
+        await global.isAuthorization(headers);
           let results;
           await ProjectModel.findOneAndDelete({_id:_args._id})
           .then((result) => {

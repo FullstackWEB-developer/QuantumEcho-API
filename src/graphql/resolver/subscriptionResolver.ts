@@ -1,38 +1,42 @@
 import {SubscriptionModel} from "../../models/dbmodel";
+const global = require('../../global');
 
 const subscriptionResolver = {
     Query: {
-      async subscriptionCount (_parent: any, _args: any) {
+      async subscriptionCount (_parent: any, _args: any, { headers }: any) {
+        await global.isAuthorization(headers);
         const count = await SubscriptionModel.countDocuments(_args);
         return count;
       },
-      async subscriptions (_parent: any, _args: any) {
+      async subscriptions (_parent: any, _args: any, { headers }: any) {
+        await global.isAuthorization(headers);
         const lists = await SubscriptionModel.find({creator:_args.creator});
         return lists;
       },
-      async subscription (_parent: any, _args: any) {
+      async subscription (_parent: any, _args: any, { headers }: any) {
+        await global.isAuthorization(headers);
         const result = await SubscriptionModel.findOne({_id: _args._id});
         return result;
       }
     },
     Mutation: {
-        async postSubscription(_parent: any, _args: any) {
+        async postSubscription(_parent: any, _args: any, { headers }: any) {
+          await global.isAuthorization(headers);
           const newData = {
             ..._args.input,
           }
-          console.log("🚀 ~ file: subscriptionResolver.ts ~ line 22 ~ postSubscription ~ newData", newData)
           let result;
           await SubscriptionModel.create(newData)
           .then(() => {
             result = {message:"Successfully created."}
           })
           .catch((error) => {
-            console.log("🚀 ~ file: subscriptionResolver.ts ~ line 30 ~ postSubscription ~ error", error)
             result = {message:error._message};
           });
           return result;
         },
-        async updateSubscription(_parent: any, _args: any) {
+        async updateSubscription(_parent: any, _args: any, { headers }: any) {
+          await global.isAuthorization(headers);
           const updateData = {
             ..._args.input,
           }
@@ -45,7 +49,8 @@ const subscriptionResolver = {
           });
           return results;
         },
-        async deleteSubscription(_parent: any, _args: any) {
+        async deleteSubscription(_parent: any, _args: any, { headers }: any) {
+          await global.isAuthorization(headers);
           let results;
           await SubscriptionModel.findOneAndDelete({_id:_args._id})
           .then((result) => {

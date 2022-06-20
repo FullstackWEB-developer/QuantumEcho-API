@@ -77,23 +77,20 @@ export class Operator {
     @prop({type: () => String})
     public company?: string;
 
-    // @prop({ref: () => Subscription, default: []})
-    // // public store?: Ref<Subscription>[];
-    // public store?: string[];
-
-    // @prop({ref: () => Customer, default: []})
-    // // public customers?: Ref<Customer>[];
-    // public customers?: string[];
-
-    // @prop({ref: () => Protocol, default: []})
-    // // public protocols?: Ref<Protocol>[];
-    // public protocols?: string[];
-
     @prop()
     public kingdom?: string;
 
     @prop()
     public species?: string;
+
+    @prop({ref: () => Subscription, default: []})
+    public store?: Ref<Subscription>[];
+
+    @prop({ref: () => Customer, default: []})
+    public customers?: Ref<Customer>[];
+
+    @prop({ref: () => Protocol, default: []})
+    public protocols?: Ref<Protocol>[];
 
 }   
             

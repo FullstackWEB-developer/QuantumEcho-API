@@ -1,23 +1,28 @@
 import {ProtocolModel} from "../../models/dbmodel";
+const global = require('../../global');
 
 const protocolResolver = {
     Query: {
-      async protocolCount (_parent: any, _args: any) {
+      async protocolCount (_parent: any, _args: any, { headers }: any) {
+        await global.isAuthorization(headers);
         const count = await ProtocolModel.countDocuments(_args);
         return count;
       },
-      async protocols (_parent: any, _args: any) {
+      async protocols (_parent: any, _args: any, { headers }: any) {
+        await global.isAuthorization(headers);
         let lists = [];
         lists = await ProtocolModel.find(_args.input);
         return lists;
       },
-      async protocol (_parent: any, _args: any) {
+      async protocol (_parent: any, _args: any, { headers }: any) {
+        await global.isAuthorization(headers);
         const result = await ProtocolModel.findOne({_id: _args._id});
         return result;
       }
     },
     Mutation: {
-        async postProtocol(_parent: any, _args: any) {
+        async postProtocol(_parent: any, _args: any, { headers }: any) {
+        await global.isAuthorization(headers);
           const newData = {
             ..._args.input,
           }
@@ -31,7 +36,8 @@ const protocolResolver = {
           });
           return result;
         },
-        async updateProtocol(_parent: any, _args: any) {
+        async updateProtocol(_parent: any, _args: any, { headers }: any) {
+        await global.isAuthorization(headers);
           const updateData = {
             ..._args.input,
           }
@@ -44,7 +50,8 @@ const protocolResolver = {
           });
           return results;
         },
-        async deleteProtocol(_parent: any, _args: any) {
+        async deleteProtocol(_parent: any, _args: any, { headers }: any) {
+        await global.isAuthorization(headers);
           let results;
           await ProtocolModel.findOneAndDelete({_id:_args._id})
           .then((result) => {

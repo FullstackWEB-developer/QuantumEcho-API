@@ -1,22 +1,27 @@
 import { DailySurveyModel } from "../../models/dbmodel";
+const global = require('../../global');
 
 const dailysurveyResolver = {
     Query: {
-      async daliySurveyCount (_parent: any, _args: any) {
+      async daliySurveyCount (_parent: any, _args: any, { headers }: any) {
+        await global.isAuthorization(headers);
         const count = await DailySurveyModel.countDocuments(_args);
         return count;
       },
-      async daliySurveys (_parent: any, _args: any) {
+      async daliySurveys (_parent: any, _args: any, { headers }: any) {
+        await global.isAuthorization(headers);
         const lists = await DailySurveyModel.find();
         return lists;
       },
-      async daliySurvey (_parent: any, _args: any) {
+      async daliySurvey (_parent: any, _args: any, { headers }: any) {
+        await global.isAuthorization(headers);
         const result = await DailySurveyModel.findOne({_id: _args._id});
         return result;
       }
     },
     Mutation: {
-        async postDailySurvey(_parent: any, _args: any) {
+        async postDailySurvey(_parent: any, _args: any, { headers }: any) {
+          await global.isAuthorization(headers);
           const newData = {
             ..._args.input,
           }
@@ -30,7 +35,8 @@ const dailysurveyResolver = {
           });
           return result;
         },
-        async updateDailySurvey(_parent: any, _args: any) {
+        async updateDailySurvey(_parent: any, _args: any, { headers }: any) {
+          await global.isAuthorization(headers);
           const updateData = {
             ..._args.input,
           }
@@ -43,7 +49,8 @@ const dailysurveyResolver = {
           });
           return results;
         },
-        async deleteDailySurvey(_parent: any, _args: any) {
+        async deleteDailySurvey(_parent: any, _args: any, { headers }: any) {
+          await global.isAuthorization(headers);
           let results;
           await DailySurveyModel.findOneAndDelete({_id:_args._id})
           .then((result) => {

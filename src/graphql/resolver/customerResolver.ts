@@ -1,23 +1,28 @@
 
 import {CustomerModel} from "../../models/dbmodel";
+const global = require('../../global');
 
 const customerResolver = {
     Query: {
-      async customerCount (_parent: any, _args: any) {
+      async customerCount (_parent: any, _args: any, { headers }: any) {
+        await global.isAuthorization(headers);
         const count = await CustomerModel.countDocuments(_args);
         return count;
       },
-      async customers (_parent: any, _args: any) {
+      async customers (_parent: any, _args: any, { headers }: any) {
+        await global.isAuthorization(headers);
         const lists = await CustomerModel.find();
         return lists;
       },
-      async customer (_parent: any, _args: any) {
+      async customer (_parent: any, _args: any, { headers }: any) {
+        await global.isAuthorization(headers);
         const result = await CustomerModel.findOne({_id: _args._id});
         return result;
       }
     },
     Mutation: {
-        async postCustomer(_parent: any, _args: any) {
+        async postCustomer(_parent: any, _args: any, { headers }: any) {
+          await global.isAuthorization(headers);
           const newData = {
             ..._args.input,
           }
@@ -31,7 +36,8 @@ const customerResolver = {
           });
           return result;
         },
-        async updateCustomer(_parent: any, _args: any) {
+        async updateCustomer(_parent: any, _args: any, { headers }: any) {
+          await global.isAuthorization(headers);
           const updateData = {
             ..._args.input,
           }
@@ -44,7 +50,8 @@ const customerResolver = {
           });
           return results;
         },
-        async deleteCustomer(_parent: any, _args: any) {
+        async deleteCustomer(_parent: any, _args: any, { headers }: any) {
+          await global.isAuthorization(headers);
           let results;
           await CustomerModel.findOneAndDelete({_id:_args._id})
           .then((result) => {

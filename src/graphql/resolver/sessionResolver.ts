@@ -1,22 +1,27 @@
 import {SessionModel} from "../../models/dbmodel";
+const global = require('../../global');
 
 const sessionResolver = {
     Query: {
-      async sessionCount (_parent: any, _args: any) {
+      async sessionCount (_parent: any, _args: any, { headers }: any) {
+        await global.isAuthorization(headers);
         const count = await SessionModel.countDocuments(_args);
         return count;
       },
-      async sessions (_parent: any, _args: any) {
+      async sessions (_parent: any, _args: any, { headers }: any) {
+        await global.isAuthorization(headers);
         const lists = await SessionModel.find();
         return lists;
       },
-      async session (_parent: any, _args: any) {
+      async session (_parent: any, _args: any, { headers }: any) {
+        await global.isAuthorization(headers);
         const result = await SessionModel.findOne({_id: _args._id});
         return result;
       }
     },
     Mutation: {
-        async postSession(_parent: any, _args: any) {
+        async postSession(_parent: any, _args: any, { headers }: any) {
+        await global.isAuthorization(headers);
           const newData = {
             ..._args.input,
           }
@@ -30,7 +35,8 @@ const sessionResolver = {
           });
           return result;
         },
-        async updateSession(_parent: any, _args: any) {
+        async updateSession(_parent: any, _args: any, { headers }: any) {
+        await global.isAuthorization(headers);
           const updateData = {
             ..._args.input,
           }
@@ -43,7 +49,8 @@ const sessionResolver = {
           });
           return results;
         },
-        async deleteSession(_parent: any, _args: any) {
+        async deleteSession(_parent: any, _args: any, { headers }: any) {
+        await global.isAuthorization(headers);
           let results;
           await SessionModel.findOneAndDelete({_id:_args._id})
           .then((result) => {

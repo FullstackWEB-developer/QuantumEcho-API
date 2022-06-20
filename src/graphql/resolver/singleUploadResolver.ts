@@ -1,15 +1,18 @@
 
 import fs from 'fs';
 import path from 'path';
+const global = require('../../global');
 
 const singleUploadResolver = {
   Query: {
-    async otherFields (_parent: any, _args: any) {
+    async otherFields (_parent: any, _args: any, { headers }: any) {
+        await global.isAuthorization(headers);
       return true;
     }
   },
   Mutation: {
-      async singleUpload(_parent: any, _args: any) {      
+      async singleUpload(_parent: any, _args: any, { headers }: any) {
+        await global.isAuthorization(headers);      
         const filename = _args.filename
         const username = _args.username
         const imgPath = `${process.env.UPLOAD_TEMP_DIR}${username}`
@@ -19,6 +22,7 @@ const singleUploadResolver = {
 
         fs.writeFile(pathName, base64Data, 'base64', (err) => {
           console.log("File Upload Error >>>> ", err);
+          if (err) throw new Error('File Upload Error');
         });
         return { filePath:`${imgPath}/${filename}` };
       },
@@ -26,4 +30,3 @@ const singleUploadResolver = {
 }
 
 export default singleUploadResolver;
-// module.exports = singleUploadResolver
