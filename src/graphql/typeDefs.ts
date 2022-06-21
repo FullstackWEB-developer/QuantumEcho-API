@@ -1,6 +1,6 @@
 import operatortypeDefs from './typeDefs/operatortypeDefs'
 import contactInfotypeDefs from './typeDefs/contactInfotypeDefs'
-import subscriptiontypeDefs from './typeDefs/subscriptiontypeDefs'
+import subscribtypeDefs from './typeDefs/subscribtypeDefs'
 import moduletypeDefs from './typeDefs/moduletypeDefs'
 import customertypeDefs from './typeDefs/customertypeDefs'
 import dailySurveytypeDefs from './typeDefs/dailySurveytypeDefs'
@@ -18,7 +18,7 @@ import singleUploadtypeDefs from './typeDefs/singleUploadtypeDefs'
 const typeDefs = [
     operatortypeDefs,
     contactInfotypeDefs,
-    subscriptiontypeDefs,
+    subscribtypeDefs,
     moduletypeDefs,
     customertypeDefs,
     dailySurveytypeDefs,

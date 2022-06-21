@@ -1,14 +1,14 @@
 import { prop, Ref} from '@typegoose/typegoose';
 import { Operator } from './operator';
-import { Subscription } from './subscription';
+import { Subscrib } from './subscrib';
 
 export class Transaction {
 
     // @prop({type: () => mongoose.Types.ObjectId})
     // public transactionId!: string;
 
-    @prop({ref: () => Subscription})
-    public subscriptions!: Ref<Subscription>[];
+    @prop({ref: () => Subscrib})
+    public subscribs!: Ref<Subscrib>[];
 
     // @prop({type: () => Date, default: Date.now})
     // public dateOfTransaction!: Date; // mongoose can create Date of transaction automatically

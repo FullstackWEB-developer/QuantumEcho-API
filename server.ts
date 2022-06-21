@@ -18,55 +18,12 @@ app.use(cors());
 
 const schema = graphqlTools.makeExecutableSchema({typeDefs, resolvers});
 
-// app.use(function(req:Request, res:Response, next) {
-
-//   const bearerHeader = req.headers['authorization'];
-//   const jwt_access_token = bearerHeader ? bearerHeader.replace('Bearer ', '') : null;
-//   console.log("🚀 ~ file: server.ts ~ line 28 ~ app.use ~ jwt_access_token", jwt_access_token)
-//   if (jwt_access_token) {
-//     next();
-//   }else{
-//     res.sendStatus(401);
-//   }
-// });
-
-function verifyToken(req:Request, res:Response) {
-  const bearerHeader = req.headers['authorization'];
-  const jwt_access_token = bearerHeader ? bearerHeader.replace('Bearer ', '') : null;
-  console.log("🚀 ~ file: server.ts ~ line 28 ~ app.use ~ jwt_access_token", jwt_access_token)
-  if (jwt_access_token) {
-    
-  }else{
-    res.sendStatus(401);
-  }
-}
-
-const context = (async (req:Request) => {
-  const bearerHeader = req.headers['authorization'];
-  const jwt_access_token = bearerHeader ? bearerHeader.replace('Bearer ', '') : null;
-  console.log("🚀 ~ file: server.ts ~ line 28 ~ app.use ~ jwt_access_token", jwt_access_token)
-  // if (jwt_access_token) {
-    
-  // }else{
-  //   res.sendStatus(401);
-  // }
-
-  return { jwt_access_token };
-});
-
 app.use(
   '/graphql', 
-  // graphqlHeader,
-  // graphqlHTTP(async (req) => ({
-  //   schema: schema,
-  //   graphiql: true,
-  //   context: await context(req),
-  // })),
   graphqlHTTP({
     schema: schema,
     // graphiql: process.env.MODE_DEV === "true" ? true : false,
     graphiql: true,
-    // context:context,
   }),
   express.json(),
   bodyParser.json()

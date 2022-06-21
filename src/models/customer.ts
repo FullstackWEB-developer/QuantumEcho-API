@@ -4,39 +4,39 @@ import { Project } from './project';
 
 enum Sex {
 
-    MALE = 'male',
-    FEMALE = 'female',
-    OTHER = "other"
+    MALE = 'Male',
+    FEMALE = 'Female',
+    OTHER = "Other"
 
 }
 
 class ContactInfo {
 
     @prop({type: () => String, required: true })
-    public address!: string
+    public address?: string
  
     @prop({type: () => String })
-    public city!: string;
+    public city?: string;
 
     @prop({type: () => String })
-    public province!: string;
+    public province?: string;
 
     @prop({type: () => String })
-    public country!: string;
+    public country?: string;
 
     @prop({type: () => String })
-    public CAP!: string;
+    public CAP?: string;
 
     @prop({type: () => String, required: true})
-    public phoneNumber!: string; 
+    public phoneNumber?: string; 
 
 }
 
 export class Customer {
 
 // NEED TO WORK ON THIS
-    // @prop({ref: () => User})   //customerId is taken from AWS cognito (userId)
-    // public customerId!: 
+    @prop({type: () => String})   //customerId is taken from AWS cognito (userId)
+    public customerId?: string; 
     
     @prop({type: () => String, required: true})
     public firstName!: string;
@@ -65,17 +65,17 @@ export class Customer {
     @prop({type: () => String, required: true})
     public profileImage!: string;
 
-    @prop({required: true, type: () => String, enum:Object.values(Sex)})
+    @prop({required: true, type: () => String})
     public bioSex!: string;
 
-    @prop({type: () => Date, required: true})
-    public lastAccess!: Date;
+    @prop({type: () => Date})
+    public lastAccess?: Date;
 
     @prop({ref: () => DailySurvey})
-    public  dailySurveys! : Ref<DailySurvey>[];
+    public  dailySurveys? : Ref<DailySurvey>[];
 
     @prop({ref: () => Project})
-    public  projects! : Ref<Project>[];
+    public  projects? : Ref<Project>[];
     
 }
 

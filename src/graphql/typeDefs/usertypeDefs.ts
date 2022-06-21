@@ -2,7 +2,6 @@
 const typeDefs = `
 type User {
     _id:ID!
-    username:String!    
     email:String!
     password:String!
     role:[String]!
@@ -10,7 +9,6 @@ type User {
     status:String
 }
 input UserInput{
-    username:String  
     email:String
     password:String
     role:[String]
@@ -21,7 +19,7 @@ input UserInput{
 type Query {
     userCount : Int!
     users:[User]
-    user(username: String!): User
+    user(email: String!): User
 }
 
 type Mutation {
@@ -29,11 +27,11 @@ type Mutation {
     postUser(input: UserInput): Message
     
     updateUser(
-        username:String!
+        email:String!
         input:UserInput
     ):Operator
   
-    deleteUser(username:String!):Message!
+    deleteUser(email:String!):Message!
 
 }
 `

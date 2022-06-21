@@ -6,7 +6,7 @@ type Admin {
     firstName:String
     lastName:String
     email:String
-    subscriptions:[String]
+    subscribs:[String]
     subRole:String
 }
 
@@ -16,7 +16,7 @@ input AdminInput {
     firstName:String
     lastName:String
     email:String
-    subscriptions:[String]
+    subscribs:[String]
     subRole:String
 }
 

@@ -1,6 +1,6 @@
 import { prop, getModelForClass, Ref} from '@typegoose/typegoose';
 import mongoose, { Schema, SchemaTypes } from 'mongoose';
-import { Subscription } from './subscription';
+import { Subscrib } from './subscrib';
 import { User } from './user';
 
 
@@ -54,8 +54,8 @@ export class Admin {
     @prop({type: () => String, required: true, unique: true})
     public email!: string; 
 
-    @prop({type : () => mongoose.Types.ObjectId, required: true, ref:'Subscription'})
-    public subscriptions!: Ref<Subscription>[];
+    @prop({type : () => mongoose.Types.ObjectId, required: true, ref:'Subscrib'})
+    public subscribs!: Ref<Subscrib>[];
 
     @prop({type: () => String, required: true, enum: Object.values(SubRoles)}) 
     public subRole!: string;

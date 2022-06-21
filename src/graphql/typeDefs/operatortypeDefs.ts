@@ -2,7 +2,7 @@
 const typeDefs = `
 type Operator{
   _id:ID!
-  username:String!
+  operatorId:String!
   firstName:String
   lastName:String
   placeOfBirth:String
@@ -15,13 +15,13 @@ type Operator{
   company:String
   kingdom:String
   species:String
-  store:[String]
-  customers:[String]
-  protocols:[String]
+  store:[Subscrib]
+  customers:[Customer]
+  protocols:[Protocol]
 }
 
 input OperatorInput{
-  username:String
+  operatorId:String!
   firstName:String
   lastName:String
   placeOfBirth:String
@@ -48,7 +48,7 @@ enum Sex {
 type Query {
   operatorCount : Int!
   operators:[Operator]
-  operator(username: String!): Operator
+  operator(operatorId: String!): Operator
 }
 
 type Mutation {
@@ -56,11 +56,11 @@ type Mutation {
   postOperator(input: OperatorInput): Message!
   
   updateOperator(
-    username:String!
+    operatorId:String!
     input:OperatorInput
   ):Operator
 
-  deleteOperator(username:String!):Message!
+  deleteOperator(operatorId:String!):Message!
 }
 
 `

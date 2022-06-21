@@ -30,7 +30,7 @@ const adminResolver = {
           .then(() => {
             result = {message:"Successfully created new treatment."}
           })
-          .catch((error) => {
+          .catch((error:any) => {
             result = {message:error._message};
           });
           return result;
@@ -42,9 +42,9 @@ const adminResolver = {
           }
           let results;
           await AdminModel.findOneAndUpdate({_id:_args._id}, updateData, {new: true})
-          .then((result) => {
+          .then((result:any) => {
               results = result;
-          }).catch((error) => {
+          }).catch((error:any) => {
             results = null;
           });
           return results;
@@ -53,10 +53,10 @@ const adminResolver = {
           await global.isAuthorization(headers);
           let results;
           await AdminModel.findOneAndDelete({_id:_args._id})
-          .then((result) => {
+          .then((result:any) => {
               results = {message:"Successfully deleted."};              
           })
-          .catch((error) => {
+          .catch((error:any) => {
               results = {message:error._message}
           });
           return results;

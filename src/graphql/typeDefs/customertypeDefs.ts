@@ -2,6 +2,7 @@
 const typeDefs = `
 type Customer{
     _id:ID!
+    customerId:String
     firstName:String
     lastName:String
     placeOfBirth:String
@@ -11,13 +12,15 @@ type Customer{
     species:String
     profileImage:String
     email:String
-    bioSex:Sex
+    bioSex:String
     lastAccess:String
     dailySurveys:[DailySurvey]
     projects:[Project]
 }
 
 input CustomerInput{
+    _id:ID
+    customerId:String
     firstName:String
     lastName:String
     placeOfBirth:String
@@ -29,8 +32,13 @@ input CustomerInput{
     email:String
     bioSex:String
     lastAccess:String
-    dailySurveys:[DailySurveyInput]
-    projects:[ProjectInput]
+    dailySurveys:[String]
+    projects:[String]
+}
+
+type CustomerResultMessage {
+    message:String!
+    _id:String
 }
 
 type Query {
@@ -41,12 +49,12 @@ type Query {
 
 type Mutation {
 
-    postCustomer(input: CustomerInput): Message
+    postCustomer(input: CustomerInput): Customer
     
     updateCustomer(
       _id:ID!
       input:CustomerInput
-    ):Customer
+    ):CustomerResultMessage
   
     deleteCustomer(_id:ID!):Message!
 

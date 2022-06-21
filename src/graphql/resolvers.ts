@@ -3,7 +3,7 @@ import deepmerge from 'deepmerge';
 import operatorResolver from './resolver/operatorResolver';
 import customerResolver from './resolver/customerResolver';
 import userResolver from './resolver/userResolver';
-import subscriptionResolver from './resolver/subscriptionResolver';
+import subscribResolver from './resolver/subscribResolver';
 import adminResolver from './resolver/adminResolver';
 import dailysurveyResolver from './resolver/dailysurveyResolver';
 import projectResolver from './resolver/projectResolver';
@@ -17,7 +17,7 @@ const resolvers = deepmerge.all([
     operatorResolver,
     customerResolver,
     userResolver,
-    subscriptionResolver,
+    subscribResolver,
     adminResolver,
     dailysurveyResolver,
     projectResolver,

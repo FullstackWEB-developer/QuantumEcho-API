@@ -1,62 +1,62 @@
-import { DailySurveyModel } from "../../models/dbmodel";
+import {SubscribModel} from "../../models/dbmodel";
 const global = require('../../global');
 
-const dailysurveyResolver = {
+const subscribResolver = {
     Query: {
-      async daliySurveyCount (_parent: any, _args: any, { headers }: any) {
+      async subscribCount (_parent: any, _args: any, { headers }: any) {
         await global.isAuthorization(headers);
-        const count = await DailySurveyModel.countDocuments(_args);
+        const count = await SubscribModel.countDocuments(_args);
         return count;
       },
-      async daliySurveys (_parent: any, _args: any, { headers }: any) {
+      async subscribs (_parent: any, _args: any, { headers }: any) {
         await global.isAuthorization(headers);
-        const lists = await DailySurveyModel.find();
+        const lists = await SubscribModel.find({creator:_args.creator});
         return lists;
       },
-      async daliySurvey (_parent: any, _args: any, { headers }: any) {
+      async subscrib (_parent: any, _args: any, { headers }: any) {
         await global.isAuthorization(headers);
-        const result = await DailySurveyModel.findOne({_id: _args._id});
+        const result = await SubscribModel.findOne({_id: _args._id});
         return result;
       }
     },
     Mutation: {
-        async postDailySurvey(_parent: any, _args: any, { headers }: any) {
+        async postSubscrib(_parent: any, _args: any, { headers }: any) {
           await global.isAuthorization(headers);
           const newData = {
             ..._args.input,
           }
           let result;
-          await DailySurveyModel.create(newData)
+          await SubscribModel.create(newData)
           .then(() => {
             result = {message:"Successfully created."}
           })
-          .catch((error:any) => {
+          .catch((error) => {
             result = {message:error._message};
           });
           return result;
         },
-        async updateDailySurvey(_parent: any, _args: any, { headers }: any) {
+        async updateSubscrib(_parent: any, _args: any, { headers }: any) {
           await global.isAuthorization(headers);
           const updateData = {
             ..._args.input,
           }
           let results;
-          await DailySurveyModel.findOneAndUpdate({_id:_args._id}, updateData, {new: true})
-          .then((result:any) => {
+          await SubscribModel.findOneAndUpdate({_id:_args._id}, updateData, {new: true})
+          .then((result) => {
               results = result;
-          }).catch((error:any) => {
+          }).catch((error) => {
             results = null;
           });
           return results;
         },
-        async deleteDailySurvey(_parent: any, _args: any, { headers }: any) {
+        async deleteSubscrib(_parent: any, _args: any, { headers }: any) {
           await global.isAuthorization(headers);
           let results;
-          await DailySurveyModel.findOneAndDelete({_id:_args._id})
-          .then((result:any) => {
+          await SubscribModel.findOneAndDelete({_id:_args._id})
+          .then((result) => {
               results = {message:"Successfully deleted."};              
           })
-          .catch((error:any) => {
+          .catch((error) => {
               results = {message:error._message}
           });
           return results;
@@ -64,4 +64,4 @@ const dailysurveyResolver = {
     }
 }
 
-export default dailysurveyResolver;
+export default subscribResolver;

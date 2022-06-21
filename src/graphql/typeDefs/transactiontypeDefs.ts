@@ -2,12 +2,12 @@
 const typeDefs = `
 type Transaction{
     _id:ID!
-    subscriptions:[Subscription]
+    subscribs:[Subscrib]
     operatorBuyer:Operator
 }
 
 input TransactionInput{
-    subscriptions:[SubscriptionInput]
+    subscribs:[SubscribInput]
     operatorBuyer:OperatorInput
 }
 

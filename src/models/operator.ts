@@ -1,7 +1,8 @@
 import { prop, getModelForClass, Ref, modelOptions} from '@typegoose/typegoose';
 import { Customer } from './customer';
 import { Protocol } from './protocol';
-import { Subscription } from './subscription';
+import { Subscrib } from './subscrib';
+import { User } from './user';
 
 enum Sex {
     MALE = 'male',
@@ -41,11 +42,9 @@ class ContactInfo {
 
 export class Operator {
     // NEED TO WORK ON THIS
-    // @prop({ref: () => User})   // operatorId is taken from AWS cognito
-    // public operatorId!: 
 
     @prop({type:() =>String, required:true})
-    public username!: string; // username is AWS cognito's username
+    public operatorId!: string; // User ID is AWS cognito's username
 
     @prop({type: () => String, required: true})
     public firstName!: string; 
@@ -83,8 +82,8 @@ export class Operator {
     @prop()
     public species?: string;
 
-    @prop({ref: () => Subscription, default: []})
-    public store?: Ref<Subscription>[];
+    @prop({ref: () => Subscrib, default: []})
+    public store?: Ref<Subscrib>[];
 
     @prop({ref: () => Customer, default: []})
     public customers?: Ref<Customer>[];

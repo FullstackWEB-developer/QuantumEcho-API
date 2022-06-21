@@ -10,7 +10,7 @@ const typeDefs = `
   }
 
   type Mutation {
-    singleUpload(base64Str: String!, username:String!, filename:String!, type:String!): File!    
+    singleUpload(base64Str: String!, operatorId:String!, filename:String!, type:String!): File!    
   }
 `;
 

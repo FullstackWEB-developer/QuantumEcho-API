@@ -61,7 +61,7 @@ type Mutation {
     updateSession(
         _id:ID!
         input:SessionInput
-    ):Subscription
+    ):Subscrib
   
     deleteSession(_id:ID!):Message!
 

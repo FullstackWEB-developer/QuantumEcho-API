@@ -14,8 +14,8 @@ const singleUploadResolver = {
       async singleUpload(_parent: any, _args: any, { headers }: any) {
         await global.isAuthorization(headers);      
         const filename = _args.filename
-        const username = _args.username
-        const imgPath = `${process.env.UPLOAD_TEMP_DIR}${username}`
+        const operatorId = _args.operatorId
+        const imgPath = `${process.env.UPLOAD_TEMP_DIR}${operatorId}`
         fs.mkdirSync(path.join(path.resolve(), imgPath), { recursive: true });
         const base64Data = _args.base64Str.replace("data:"+_args.type+";base64,", "")
         const pathName = path.join(path.resolve(), `${imgPath}/${filename}`)

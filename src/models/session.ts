@@ -42,7 +42,7 @@ export class Session {
     @prop({type: () => String})
     public sessionInfo?: string;
 
-    @prop({ref : () => Operator})
+    @prop({ref : () => Operator, type:() => [String]})
     public teamMembers!: Ref<Operator>[];
 
     @prop({type: () => Interview})
@@ -69,7 +69,7 @@ export class Session {
     @prop({type: () => [String]})
     public selectedTreatments!: string[];
 
-    @prop({ref: () => Treatment})
+    @prop({ref: () => Treatment, type: () => [String]})
     public treatmentSurveys?: Ref<Treatment>[];
     
 }

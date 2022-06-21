@@ -18,7 +18,7 @@ const operatorResolver = {
       },
       async operator (_parent: any, _args: any, { headers }: any) {
         await global.isAuthorization(headers);
-        const result = await OperatorModel.findOne({username: _args.username});
+        const result = await OperatorModel.findOne({operatorId: _args.operatorId}).populate('customers').populate('protocols');
         return result;
       }
     },
@@ -33,7 +33,7 @@ const operatorResolver = {
           .then(() => {
             result = {message:"Successfully created."}
           })
-          .catch((error) => {
+          .catch((error:any) => {
             result = {message:error._message};
           });
           return result;
@@ -49,7 +49,7 @@ const operatorResolver = {
             if (fs.existsSync(_path)) {
               var fileName = path.basename(_path)
               let fileType = path.extname(fileName)
-              const newFileName = _args.username + Date.now() + fileType
+              const newFileName = _args.operatorId + Date.now() + fileType
               const operatorDirPath = `${process.env.UPLOAD_OPERATOR_PROFILE_DIR}`
               fs.mkdirSync(path.join(path.resolve(), operatorDirPath), { recursive: true });
               var newPath = path.join(path.resolve(), `${operatorDirPath}${newFileName}`)
@@ -72,22 +72,22 @@ const operatorResolver = {
               ...updateData,
             }
           }
-          if (await OperatorModel.findOne({username: _args.username})) {
+          if (await OperatorModel.findOne({operatorId: _args.operatorId})) {
             let results;
-            await OperatorModel.findOneAndUpdate({username:_args.username}, newOperator, {new: true})
-            .then((result) => {
+            await OperatorModel.findOneAndUpdate({operatorId:_args.operatorId}, newOperator, {new: true})
+            .then((result:any) => {
                 results = result;
-            }).catch((error) => {
+            }).catch((error:any) => {
               results = null;
             });
             return results;
           }else{
             let results;
             await OperatorModel.create(newOperator)
-            .then((result) => {
+            .then((result:any) => {
               results = result
             })
-            .catch((error) => {
+            .catch((error:any) => {
               results = null;
             });
             return results;
@@ -96,11 +96,11 @@ const operatorResolver = {
         async deleteOperator(_parent: any, _args: any, { headers }: any) {
           await global.isAuthorization(headers);
           let results;
-          await OperatorModel.findOneAndDelete({username:_args.username})
-          .then((result) => {
+          await OperatorModel.findOneAndDelete({operatorId:_args.operatorId})
+          .then((result:any) => {
               results = {message:"Successfully deleted."};              
           })
-          .catch((error) => {
+          .catch((error:any) => {
               results = {message:error._message}
           });
           return results;

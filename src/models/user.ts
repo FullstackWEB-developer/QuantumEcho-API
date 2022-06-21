@@ -23,9 +23,6 @@ export class User {
     // public userId?: mongoose.Types.ObjectId; // mongoose will add _id (THAT IS userId) field for us
 
     @prop ({type: () => String, required: true, unique: true})
-    public username!: string; //
-
-    @prop ({type: () => String, required: true, unique: true})
     public email!: string; //
 
     @prop ({type: () => String, required: true})
@@ -36,9 +33,6 @@ export class User {
 
     @prop ({type: () => String})
     public accessToken?: string;
-    
-    // @prop ({type: () => Date})
-    // public creationDate = new Date();
 
     @prop({type: () => String, required: true, enum: Object.values(Status)})
     public status?: string;    

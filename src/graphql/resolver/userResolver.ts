@@ -1,6 +1,7 @@
 import DBModel from "../../models/user";
 import { OperatorModel } from "../../models/dbmodel";
 const global = require('../../global');
+const crypto = require('crypto');
 
 const userResolver = {
     Query: {
@@ -16,7 +17,7 @@ const userResolver = {
       },
       async user (_parent: any, _args: any, { headers }: any) {
         await global.isAuthorization(headers);
-        const result = await DBModel.findOne({username: _args.username});
+        const result = await DBModel.findOne({email: _args.email});
         return result;
       }
     },
@@ -25,6 +26,7 @@ const userResolver = {
         // await global.isAuthorization(headers, false);
           const newData = {
             ..._args.input,
+            password: crypto.createHash('sha256').update(_args.input.password).digest('hex'),
           }
           let result;
           await DBModel.create(newData)
@@ -40,12 +42,13 @@ const userResolver = {
         // await global.isAuthorization(headers, false);
           const updateData = {
             ..._args.input,
+            password: crypto.createHash('sha256').update(_args.input.password).digest('hex'),
           };
           let results;
-          if (await DBModel.findOne({username: updateData.username})) {
-            await DBModel.findOneAndUpdate({username:_args.username}, updateData, {new: true})
+          if (await DBModel.findOne({email: _args.email})) {
+            await DBModel.findOneAndUpdate({email:_args.email}, updateData, {new: true})
             .then(async (result) => {
-              results = await OperatorModel.findOne({username:_args.username});
+              results = await OperatorModel.findOne({email:_args.email});
             }).catch((error) => {
               results = null;
             });
@@ -64,7 +67,7 @@ const userResolver = {
         async deleteUser(_parent: any, _args: any, { headers }: any) {
         await global.isAuthorization(headers);
           let results;
-          await DBModel.findOneAndDelete({username:_args.username})
+          await DBModel.findOneAndDelete({email:_args.email})
           .then((result) => {
               results = {message:"Successfully deleted."};              
           })
