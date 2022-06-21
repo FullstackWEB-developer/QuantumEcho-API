@@ -42,7 +42,7 @@ const userResolver = {
         // await global.isAuthorization(headers, false);
           const updateData = {
             ..._args.input,
-            password: crypto.createHash('sha256').update(_args.input.password).digest('hex'),
+            // password: crypto.createHash('sha256').update(_args.input.password).digest('hex'),
           };
           let results;
           if (await DBModel.findOne({email: _args.email})) {
