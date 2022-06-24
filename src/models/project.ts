@@ -4,8 +4,8 @@ import { Session } from './session';
 
 export class Project {
 
-    @prop({type: () => String})
-    public projectId!: string; // mongoose will add _id field for us 
+    // @prop({type: () => String})
+    // public projectId!: string; // mongoose will add _id field for us 
 
     @prop({type: () => String})
     public projectName?: string;  // create new project or we seleceted projectName from Project's Model

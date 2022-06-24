@@ -36,6 +36,12 @@ input CustomerInput{
     projects:[String]
 }
 
+type CustomersResult{
+    lists:[Customer]
+    totalCount:Int
+    perCount:Int
+  }
+
 type CustomerResultMessage {
     message:String!
     _id:String
@@ -44,7 +50,7 @@ type CustomerResultMessage {
 
 type Query {
     customerCount : Int!
-    customers:[Customer]
+    customers(condition:CustomerInput, pageNum:Int):CustomersResult
     customer(_id: ID!): Customer
 }
 

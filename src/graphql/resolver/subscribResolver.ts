@@ -23,8 +23,9 @@ const subscribResolver = {
         var pageNum:number = 0;
         if (_args.pageNum && _args.pageNum > 0) {
           pageNum = _args.pageNum - 1;
+          return {lists:tempArr.slice(pageNum*Number(process.env.PAGE_PER_COUNT), (pageNum+1) * Number(process.env.PAGE_PER_COUNT)), totalCount:tempArr.length, perCount:Number(process.env.PAGE_PER_COUNT)};
         }
-        return {lists:tempArr.slice(pageNum*Number(process.env.PAGE_PER_COUNT), (pageNum+1) * Number(process.env.PAGE_PER_COUNT)), totalCount:tempArr.length, perCount:Number(process.env.PAGE_PER_COUNT)};
+        return {lists:tempArr, totalCount:tempArr.length, perCount:Number(process.env.PAGE_PER_COUNT)};
       },
 
       async subscrib (_parent: any, _args: any, { headers }: any) {

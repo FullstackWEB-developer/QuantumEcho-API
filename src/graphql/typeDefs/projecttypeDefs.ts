@@ -1,31 +1,33 @@
 
 const typeDefs = `
 type Project{
-    projectId:ID!
+    _id:ID!
     projectName:String
     coordinator:Operator
     sessions:[Session]
 }
+
 input ProjectInput{
     projectName:String
-    coordinator:OperatorInput
-    sessions:[SessionInput]
+    coordinator:String
+    sessions:[String]
 }
 
-input ProjectSessionInput {
-  sessionId:String
-  operatorId:[String]
+type ProjectResult{
+  lists:[Project]
+  totalCount:Int
+  perCount:Int
 }
 
 type Query {
   projectCount : Int!
-  projects:[Project]
+  projects(condition:ProjectInput, pageNum:Int):ProjectResult
   project(_id: ID!): Project
 }
 
 type Mutation {
 
-  postProject(input: ProjectInput, sessions:ProjectSessionInput): Message!
+  postProject(input: ProjectInput): Project
   
   updateProject(
     _id:ID!

@@ -7,16 +7,28 @@ import path from 'path';
 
 const customerResolver = {
     Query: {
+
       async customerCount (_parent: any, _args: any, { headers }: any) {
         await global.isAuthorization(headers);
         const count = await CustomerModel.countDocuments(_args);
         return count;
       },
+
       async customers (_parent: any, _args: any, { headers }: any) {
+        console.log("🚀 ~ file: customerResolver.ts ~ line 18 ~ customers ~ _args", _args)
         await global.isAuthorization(headers);
         const lists = await CustomerModel.find();
-        return lists;
+
+        var pageNum:number = 0;
+        if (_args.pageNum && _args.pageNum > 0) {
+            pageNum = _args.pageNum - 1;
+            return {lists:lists.slice(pageNum*Number(process.env.PAGE_PER_COUNT), (pageNum+1) * Number(process.env.PAGE_PER_COUNT)), totalCount:lists.length, perCount:Number(process.env.PAGE_PER_COUNT)};
+        }else{
+          return {lists, totalCount:lists.length, perCount:Number(process.env.PAGE_PER_COUNT)};
+        }
+        
       },
+      
       async customer (_parent: any, _args: any, { headers }: any) {
         await global.isAuthorization(headers);
         const result = await CustomerModel.findOne({_id: _args._id});

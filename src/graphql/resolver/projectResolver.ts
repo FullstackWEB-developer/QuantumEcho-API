@@ -1,4 +1,4 @@
-import {ProjectModel} from "../../models/dbmodel";
+import {OperatorModel, ProjectModel, SessionModel} from "../../models/dbmodel";
 const global = require('../../global');
 
 const projectResolver = {
@@ -10,8 +10,33 @@ const projectResolver = {
       },
       async projects (_parent: any, _args: any, { headers }: any) {
         await global.isAuthorization(headers);
-        const lists = await ProjectModel.find();
-        return lists;
+        const lists = await ProjectModel.find();    
+
+        let tempArr:any[] = [];
+        await Promise.all(
+          lists.map(async(row) => {
+            row.coordinator = await OperatorModel.findOne({_id: row.coordinator}) as any;
+            const sessions = row.sessions as any[]
+            let tempSessions:any = [];
+            await Promise.all(
+              sessions?.map(async(element) => {
+                const sessionData = await SessionModel.findOne({_id:element}) as any;
+                tempSessions.push(sessionData);
+              })              
+            );
+
+            row.sessions = tempSessions;
+                       
+            tempArr.push(row);
+          })
+        );
+
+        var pageNum:number = 0;
+        if (_args.pageNum && _args.pageNum > 0) {
+          pageNum = _args.pageNum - 1;
+          return {lists:tempArr.slice(pageNum*Number(process.env.PAGE_PER_COUNT), (pageNum+1) * Number(process.env.PAGE_PER_COUNT)), totalCount:tempArr.length, perCount:Number(process.env.PAGE_PER_COUNT)};
+        }
+        return {lists:tempArr, totalCount:tempArr.length, perCount:Number(process.env.PAGE_PER_COUNT)};
       },
       async project (_parent: any, _args: any, { headers }: any) {
         await global.isAuthorization(headers);
@@ -21,19 +46,11 @@ const projectResolver = {
     },
     Mutation: {
         async postProject(_parent: any, _args: any, { headers }: any) {
-        await global.isAuthorization(headers);
+          await global.isAuthorization(headers);
           const newData = {
             ..._args.input,
           }
-          let result;
-          await ProjectModel.create(newData)
-          .then(() => {
-            result = {message:"Successfully created."}
-          })
-          .catch((error) => {
-            result = {message:error._message};
-          });
-          return result;
+          return await ProjectModel.create(newData)
         },
 
         async updateProject(_parent: any, _args: any, { headers }: any) {

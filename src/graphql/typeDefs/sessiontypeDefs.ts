@@ -43,14 +43,20 @@ input InterviewInput {
     repeptorImages:[String]
     motherNameOrRelativeName:String
     fatherNameOrRelativeName:String
-    symptoms:String
-    goals:String
+    symptoms:[String]
+    goals:[String]
     additionalInfo:String
 }
 
+type SessionResult{
+    lists:[Session]
+    totalCount:Int
+    perCount:Int
+  }
+
 type Query {
     sessionCount : Int!
-    sessions:[Session]
+    sessions(condition:SessionInput, pageNum:Int):SessionResult
     session(_id: ID!): Session
 }
 
@@ -61,7 +67,7 @@ type Mutation {
     updateSession(
         _id:ID!
         input:SessionInput
-    ):Subscrib
+    ):Session
   
     deleteSession(_id:ID!):Message!
 
