@@ -1,6 +1,6 @@
 const typeDefs = `
 type Module{
-    moduleId:String!
+    _id:String!
     moduleName:String
 }
 input ModuleInput{

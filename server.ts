@@ -1,4 +1,4 @@
-import express, { Request, Response } from "express";
+import express from "express";
 import mongoose from "mongoose";
 import { graphqlHTTP } from "express-graphql";
 // import graphqlHeader from 'express-graphql-header';
@@ -10,7 +10,7 @@ import typeDefs from "./src/graphql/typeDefs";
 import resolvers from "./src/graphql/resolvers";
 
 const graphqlTools = require('graphql-tools');
-const graphqlHeader = require('express-graphql-header');
+// const graphqlHeader = require('express-graphql-header');
 
 const app = express();
 
@@ -25,10 +25,23 @@ app.use(
     // graphiql: process.env.MODE_DEV === "true" ? true : false,
     graphiql: true,
   }),
-  express.json(),
-  bodyParser.json()
+  
+  // bodyParser.json({
+  //   limit: '50mb'
+  // }),
+  // bodyParser.urlencoded({
+  //   limit: '50mb',
+  //   parameterLimit: 100000,
+  //   extended: true 
+  // })
 );
-app.use(express.static('./'))
+
+// app.use(bodyParser.json({limit: 1000 * 1024}))
+
+app.use(express.json({limit: '25mb'}));
+app.use(express.urlencoded({limit: '25mb'}));
+
+app.use(express.static('./'));
 
 dotenv.config();
 

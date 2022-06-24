@@ -11,7 +11,7 @@ import protocolResolver from './resolver/protocolResolver';
 import sessionResolver from './resolver/sessionResolver';
 import treatmentResolver from './resolver/treatmentResolver';
 import transactionResolver from './resolver/transactionResolver';
-import singleUploadResolver from './resolver/singleUploadResolver';
+import uploadResolver from './resolver/uploadResolver';
 
 const resolvers = deepmerge.all([
     operatorResolver,
@@ -25,7 +25,7 @@ const resolvers = deepmerge.all([
     sessionResolver,
     treatmentResolver,
     transactionResolver,
-    singleUploadResolver,
+    uploadResolver,
 ]);
 
 export default resolvers;

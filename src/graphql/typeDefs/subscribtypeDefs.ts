@@ -40,9 +40,15 @@ enum Role {
     wellness_operator
 }
 
+type SubscribResult{
+    lists:[Subscrib]
+    totalCount:Int
+    perCount:Int
+}
+
 type Query {
     subscribCount : Int!
-    subscribs(creator:String!):[Subscrib]
+    subscribs(condition:SubscribInput, pageNum:Int):SubscribResult
     subscrib(_id: ID!): Subscrib
 }
 

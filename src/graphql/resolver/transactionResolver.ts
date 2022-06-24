@@ -28,7 +28,7 @@ const transactionResolver = {
           let result;
           await TransactionModel.create(newData)
           .then(() => {
-            result = {message:"Successfully created."}
+            result = {message:"Successfully buy."}
           })
           .catch((error) => {
             result = {message:error._message};

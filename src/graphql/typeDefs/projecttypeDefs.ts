@@ -12,6 +12,11 @@ input ProjectInput{
     sessions:[SessionInput]
 }
 
+input ProjectSessionInput {
+  sessionId:String
+  operatorId:[String]
+}
+
 type Query {
   projectCount : Int!
   projects:[Project]
@@ -20,7 +25,7 @@ type Query {
 
 type Mutation {
 
-  postProject(input: ProjectInput): Message!
+  postProject(input: ProjectInput, sessions:ProjectSessionInput): Message!
   
   updateProject(
     _id:ID!

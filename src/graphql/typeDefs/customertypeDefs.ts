@@ -39,6 +39,7 @@ input CustomerInput{
 type CustomerResultMessage {
     message:String!
     _id:String
+    profilePath:String
 }
 
 type Query {
@@ -49,7 +50,7 @@ type Query {
 
 type Mutation {
 
-    postCustomer(input: CustomerInput): Customer
+    postCustomer(input: CustomerInput): CustomerResultMessage
     
     updateCustomer(
       _id:ID!

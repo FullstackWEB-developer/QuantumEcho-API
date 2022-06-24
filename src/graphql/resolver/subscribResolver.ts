@@ -1,4 +1,5 @@
 import {SubscribModel} from "../../models/dbmodel";
+import {ModuleModel} from "../../models/dbmodel"; 
 const global = require('../../global');
 
 const subscribResolver = {
@@ -8,14 +9,34 @@ const subscribResolver = {
         const count = await SubscribModel.countDocuments(_args);
         return count;
       },
+
       async subscribs (_parent: any, _args: any, { headers }: any) {
         await global.isAuthorization(headers);
-        const lists = await SubscribModel.find({creator:_args.creator});
-        return lists;
+        const lists = await SubscribModel.find(_args.condition);        
+        let tempArr:any[] = [];
+        await Promise.all(
+          lists.map(async(row) => {
+            row.features = await ModuleModel.findOne({_id: row.features}) as any;
+            tempArr.push(row);
+          })
+        );
+        var pageNum:number = 0;
+        if (_args.pageNum && _args.pageNum > 0) {
+          pageNum = _args.pageNum - 1;
+        }
+        return {lists:tempArr.slice(pageNum*Number(process.env.PAGE_PER_COUNT), (pageNum+1) * Number(process.env.PAGE_PER_COUNT)), totalCount:tempArr.length, perCount:Number(process.env.PAGE_PER_COUNT)};
       },
+
       async subscrib (_parent: any, _args: any, { headers }: any) {
         await global.isAuthorization(headers);
-        const result = await SubscribModel.findOne({_id: _args._id});
+        const result = await SubscribModel.findOne({_id: _args._id}) as any;
+        if (result) {
+          const moduleData = await ModuleModel.findOne({_id: result.features});
+          if (moduleData) {
+            result.features = moduleData
+          }
+        }
+        
         return result;
       }
     },
@@ -31,6 +52,7 @@ const subscribResolver = {
             result = {message:"Successfully created."}
           })
           .catch((error) => {
+            console.log("🚀 ~ file: subscribResolver.ts ~ line 34 ~ postSubscrib ~ error", error)
             result = {message:error._message};
           });
           return result;

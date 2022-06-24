@@ -1,4 +1,4 @@
-import { prop, Ref} from '@typegoose/typegoose';
+import { mongoose, prop, Ref} from '@typegoose/typegoose';
 import Module from './module';
 
 enum Typology {
@@ -32,7 +32,7 @@ export class Subscrib {
     @prop({type: () => String, required: true, default: []})
     public roles! : string[]; 
 
-    @prop({ref: () =>  Module})
+    @prop({ref: () =>  Module, type:() => mongoose.Types.ObjectId})
     public features! : Ref<Module>
 
     @prop({type: () => Number, required: true, default: 0})

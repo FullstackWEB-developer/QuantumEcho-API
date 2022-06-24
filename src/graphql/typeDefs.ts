@@ -13,7 +13,7 @@ import usertypeDefs from './typeDefs/usertypeDefs'
 import addresstypeDefs from './typeDefs/addresstypeDefs'
 import admintypeDefs from './typeDefs/admintypeDefs'
 import transactiontypeDefs from './typeDefs/transactiontypeDefs'
-import singleUploadtypeDefs from './typeDefs/singleUploadtypeDefs'
+import uploadtypeDefs from './typeDefs/uploadtypeDefs'
 
 const typeDefs = [
     operatortypeDefs,
@@ -31,7 +31,7 @@ const typeDefs = [
     addresstypeDefs,
     admintypeDefs,
     transactiontypeDefs,
-    singleUploadtypeDefs,
+    uploadtypeDefs,
 ]
 
 export default typeDefs

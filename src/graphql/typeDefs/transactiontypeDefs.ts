@@ -7,8 +7,8 @@ type Transaction{
 }
 
 input TransactionInput{
-    subscribs:[SubscribInput]
-    operatorBuyer:OperatorInput
+    subscribs:[String]
+    operatorBuyer:String
 }
 
 type Query {

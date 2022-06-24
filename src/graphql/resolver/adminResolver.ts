@@ -28,7 +28,7 @@ const adminResolver = {
           let result;
           await AdminModel.create(newData)
           .then(() => {
-            result = {message:"Successfully created new treatment."}
+            result = {message:"Successfully created."}
           })
           .catch((error:any) => {
             result = {message:error._message};

@@ -15,11 +15,11 @@ class Interview {
     @prop({type: () => String})
     fatherNameOrRelativeName?: string;
 
-    @prop({type: () => String})
-    public  symptoms?: string;
+    @prop({type: () => [String]})
+    public  symptoms?: string[];
 
-    @prop({type: () => String})
-    public goals?: string;
+    @prop({type: () => [String]})
+    public goals?: string[];
 
     @prop({type: () => String})
     public additionalInfo?: string;

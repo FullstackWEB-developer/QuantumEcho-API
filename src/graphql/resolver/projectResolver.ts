@@ -35,6 +35,7 @@ const projectResolver = {
           });
           return result;
         },
+
         async updateProject(_parent: any, _args: any, { headers }: any) {
         await global.isAuthorization(headers);
           const updateData = {
@@ -49,6 +50,7 @@ const projectResolver = {
           });
           return results;
         },
+        
         async deleteProject(_parent: any, _args: any, { headers }: any) {
         await global.isAuthorization(headers);
           let results;
