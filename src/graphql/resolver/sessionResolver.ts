@@ -35,7 +35,7 @@ const sessionResolver = {
         async postSession(_parent: any, _args: any, { headers }: any) {
           await global.isAuthorization(headers);          
           
-          const interviewImages = _args.input.interview.repeptorImages;
+          const interviewImages = _args.input.interview && _args.input.interview.repeptorImages ? _args.input.interview.repeptorImages : null;
           const repeptorImages:string[] = [];
           if (interviewImages) {
             await Promise.all(              
@@ -81,7 +81,7 @@ const sessionResolver = {
         async updateSession(_parent: any, _args: any, { headers }: any) {
           await global.isAuthorization(headers);
 
-          const interviewImages = _args.input.interview.repeptorImages;
+          const interviewImages = _args.input.interview && _args.input.interview.repeptorImages ? _args.input.interview.repeptorImages : null;
           const repeptorImages:string[] = [];
           if (interviewImages) {
             await Promise.all(              

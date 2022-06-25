@@ -1,7 +1,7 @@
 
 const typeDefs = `
 type Session{
-    _id:ID!
+    _id:ID
     teamMembers:[Operator]
     sessionTitle:String
     sessionInfo:String
