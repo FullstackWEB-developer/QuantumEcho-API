@@ -15,7 +15,6 @@ const customerResolver = {
       },
 
       async customers (_parent: any, _args: any, { headers }: any) {
-        console.log("🚀 ~ file: customerResolver.ts ~ line 18 ~ customers ~ _args", _args)
         await global.isAuthorization(headers);
         const lists = await CustomerModel.find();
 
@@ -48,7 +47,8 @@ const customerResolver = {
             if (fs.existsSync(_path)) {
               var fileName = path.basename(_path)
               let fileType = path.extname(fileName)
-              const newFileName = Date.now() + fileType
+              // const newFileName = Date.now() + fileType
+              const newFileName = (await global.generateRandomString(8)) + fileType;
               const clientDirPath = `${process.env.UPLOAD_CLIENT_PROFILE_DIR}`
               fs.mkdirSync(path.join(path.resolve(), clientDirPath), { recursive: true });
               var newPath = path.join(path.resolve(), `${clientDirPath}${newFileName}`)

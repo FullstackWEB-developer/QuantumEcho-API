@@ -5,6 +5,7 @@ type Session{
     teamMembers:[Operator]
     sessionTitle:String
     sessionInfo:String
+    interview:Interview
     sessionStartDate:String
     sessionEndDate:String
     conversionTable:String
@@ -13,9 +14,10 @@ type Session{
     effects:String
     selectedTreatments:[String]
     treatmentSurveys:[Treatment]
-    interview:Interview
 }
+
 input SessionInput{
+    _id:ID
     teamMembers:[OperatorInput]
     sessionTitle:String
     sessionInfo:String
@@ -34,8 +36,8 @@ type Interview {
     repeptorImages:[String]
     motherNameOrRelativeName:String
     fatherNameOrRelativeName:String
-    symptoms:String
-    goals:String
+    symptoms:[String]
+    goals:[String]
     additionalInfo:String
 }
 
@@ -62,7 +64,7 @@ type Query {
 
 type Mutation {
 
-    postSession(input: SessionInput): Message
+    postSession(input: SessionInput): Session
     
     updateSession(
         _id:ID!

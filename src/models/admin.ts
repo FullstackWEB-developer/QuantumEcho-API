@@ -1,7 +1,6 @@
-import { prop, getModelForClass, Ref} from '@typegoose/typegoose';
+import { prop, Ref, ModelOptions} from '@typegoose/typegoose';
 import mongoose, { Schema, SchemaTypes } from 'mongoose';
 import { Subscrib } from './subscrib';
-import { User } from './user';
 
 
 
@@ -31,7 +30,7 @@ enum SubRoles {
     SUPER_ADMIN = 'super_admin'
 }
 
-
+@ModelOptions({ schemaOptions: { timestamps: true } })
 export class Admin {
 
     // NEED TO WORK ON THIS

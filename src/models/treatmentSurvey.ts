@@ -1,4 +1,4 @@
-import { prop } from '@typegoose/typegoose';
+import { ModelOptions, prop } from '@typegoose/typegoose';
 
 class Questions {
 
@@ -13,6 +13,7 @@ class Questions {
 
 }
 
+@ModelOptions({ schemaOptions: { timestamps: true } })
 export class TreatmentSurvey {
 
   // @prop({ type: () => String}) // mongoose will add _id field for us that we consider as  treatmentSurveyId
@@ -28,7 +29,5 @@ export class TreatmentSurvey {
   public comments?: string;
 
 }
-
-// const TreatmentSurveyModel = getModelForClass(TreatmentSurvey);
 
 export default TreatmentSurvey;

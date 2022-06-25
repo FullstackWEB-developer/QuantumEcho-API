@@ -1,6 +1,7 @@
-import { prop, getModelForClass, Ref} from '@typegoose/typegoose';
+import { prop, Ref, ModelOptions} from '@typegoose/typegoose';
 import { Session } from 'inspector';
 
+@ModelOptions({ schemaOptions: { timestamps: true } })
 export class Evaluation {
 
     @prop({type: () => String})

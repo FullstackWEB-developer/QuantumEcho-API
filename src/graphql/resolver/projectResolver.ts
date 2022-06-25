@@ -11,6 +11,10 @@ const projectResolver = {
       async projects (_parent: any, _args: any, { headers }: any) {
         await global.isAuthorization(headers);
         const lists = await ProjectModel.find();    
+        console.log("🚀 ~ file: projectResolver.ts ~ line 14 ~ projects ~ lists", lists)
+        lists.sort(function (a:any, b:any) {
+          return b.createdAt - a.createdAt;
+        });
 
         let tempArr:any[] = [];
         await Promise.all(

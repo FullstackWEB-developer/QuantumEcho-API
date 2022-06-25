@@ -1,7 +1,8 @@
-import { prop, Ref} from '@typegoose/typegoose';
+import { ModelOptions, prop, Ref} from '@typegoose/typegoose';
 import { Operator } from './operator';
 import { Subscrib } from './subscrib';
 
+@ModelOptions({ schemaOptions: { timestamps: true } })
 export class Transaction {
 
     // @prop({type: () => mongoose.Types.ObjectId})

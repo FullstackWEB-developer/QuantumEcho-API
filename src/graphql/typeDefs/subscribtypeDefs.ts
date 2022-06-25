@@ -2,7 +2,7 @@
 const typeDefs = `
 
 type Subscrib{
-    _id:ID!
+    _id:ID
     coverImage:String
     description:String
     typology:Typology

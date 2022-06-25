@@ -1,11 +1,11 @@
-import { prop, getModelForClass, Ref} from '@typegoose/typegoose';
-import mongoose from 'mongoose';
+import { prop, Ref, ModelOptions} from '@typegoose/typegoose';
 import { Customer } from './customer';
 import { Operator } from './operator';
 import { Treatment } from './treatment';
 
 
 class Interview {
+
     @prop({type: () => [String]})
     public repeptorImages?: string[];
 
@@ -26,7 +26,7 @@ class Interview {
     
 }
 
-
+@ModelOptions({ schemaOptions: { timestamps: true } })
 export class Session {
 
     // @prop({type: () => String})
@@ -73,7 +73,5 @@ export class Session {
     public treatmentSurveys?: Ref<Treatment>[];
     
 }
-
-// const SessionModel = getModelForClass(Session)
 
 export default Session

@@ -1,7 +1,7 @@
 
 const typeDefs = `
 type Project{
-    _id:ID!
+    _id:ID
     projectName:String
     coordinator:Operator
     sessions:[Session]

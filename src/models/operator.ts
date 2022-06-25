@@ -1,8 +1,7 @@
-import { prop, getModelForClass, Ref, modelOptions} from '@typegoose/typegoose';
+import { prop, Ref, ModelOptions} from '@typegoose/typegoose';
 import { Customer } from './customer';
 import { Protocol } from './protocol';
 import { Subscrib } from './subscrib';
-import { User } from './user';
 
 enum Sex {
     MALE = 'male',
@@ -40,6 +39,7 @@ class ContactInfo {
     public phoneNumber!: string; 
 }
 
+@ModelOptions({ schemaOptions: { timestamps: true } })
 export class Operator {
     // NEED TO WORK ON THIS
 

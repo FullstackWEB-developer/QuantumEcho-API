@@ -22,11 +22,14 @@ export class User {
     // @prop()
     // public userId?: mongoose.Types.ObjectId; // mongoose will add _id (THAT IS userId) field for us
 
+    @prop ({type: () => String, required:true})
+    public cognitoId!: string
+
     @prop ({type: () => String, required: true, unique: true})
     public email!: string; //
 
     @prop ({type: () => String, required: true})
-    public password!: string;
+    public password?: string;
  //  NOTE: we will DECIDE what is the purpose of this field later
     @prop ({type: () => String, default: ['operator']})
     public role!: string[];

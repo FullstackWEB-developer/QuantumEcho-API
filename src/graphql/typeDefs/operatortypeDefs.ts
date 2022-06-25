@@ -1,8 +1,8 @@
 
 const typeDefs = `
 type Operator{
-  _id:ID!
-  operatorId:String!
+  _id:ID
+  operatorId:String
   firstName:String
   lastName:String
   placeOfBirth:String
@@ -21,7 +21,7 @@ type Operator{
 }
 
 input OperatorInput{
-  operatorId:String!
+  operatorId:String
   firstName:String
   lastName:String
   placeOfBirth:String

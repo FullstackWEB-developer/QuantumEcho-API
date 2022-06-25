@@ -2,14 +2,16 @@
 const typeDefs = `
 type User {
     _id:ID!
+    cognitoId:String
     email:String!
-    password:String!
+    password:String
     role:[String]!
     accessToken:String
     status:String
 }
 input UserInput{
     email:String
+    cognitoId:String
     password:String
     role:[String]
     accessToken:String

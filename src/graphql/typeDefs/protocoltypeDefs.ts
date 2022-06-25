@@ -2,7 +2,7 @@
 
 const typeDefs = `
 type Protocol {
-    _id:ID!
+    _id:ID
     coordinator:String
     teamOperators:[String]
     protocolName:String

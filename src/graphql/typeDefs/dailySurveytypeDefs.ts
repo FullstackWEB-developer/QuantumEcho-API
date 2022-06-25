@@ -1,7 +1,7 @@
 
 const typeDefs = `
 type DailySurvey {
-    _id:ID!
+    _id:ID
     dateOfSurvey:String
     questions:Questions
 }

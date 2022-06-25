@@ -1,5 +1,7 @@
 import {SessionModel} from "../../models/dbmodel";
 const global = require('../../global');
+import path from 'path';
+import fs from 'fs';
 
 const sessionResolver = {
     Query: {
@@ -27,36 +29,100 @@ const sessionResolver = {
         return result;
       }
     },
+
     Mutation: {
+
         async postSession(_parent: any, _args: any, { headers }: any) {
-          await global.isAuthorization(headers);
-          const newData = {
-            ..._args.input,
+          await global.isAuthorization(headers);          
+          
+          const interviewImages = _args.input.interview.repeptorImages;
+          const repeptorImages:string[] = [];
+          if (interviewImages) {
+            await Promise.all(              
+              interviewImages.map(async(row:string) => {
+                const tempFilePath = path.join(path.resolve(), row)
+                if (tempFilePath.includes(`${process.env.UPLOAD_DIR}repeptors/`)){
+                  repeptorImages.push(row);
+                }else{
+                  if (fs.existsSync(tempFilePath)) {
+                    const fileName = path.basename(tempFilePath)
+                    const fileType = path.extname(fileName)
+                    const newFileName = (await global.generateRandomString(8)) + fileType;  
+                    const repeptorDirPath = `${process.env.UPLOAD_DIR}repeptors/`;
+                    await fs.mkdirSync(path.join(path.resolve(), repeptorDirPath), { recursive: true });
+                    var newPath = path.join(path.resolve(), `${repeptorDirPath}${newFileName}`)
+                    await fs.rename(tempFilePath, newPath, function (err) {
+                      // delete temp directory
+                      fs.rm(path.dirname(tempFilePath), { recursive: true }, (err) => {});              
+                    })
+                    repeptorImages.push(`${repeptorDirPath}${newFileName}`);
+                  }
+                }
+              })
+            );
           }
-          let result;
+
+          const newData = {
+            ..._args.input, interview:{..._args.input.interview, repeptorImages}
+          }
+
+          let results;
           await SessionModel.create(newData)
-          .then(() => {
-            result = {message:"Successfully created."}
+          .then(async (result: any) => {
+            results = result;
           })
           .catch((error) => {
-            result = {message:error._message};
-          });
-          return result;
-        },
-        async updateSession(_parent: any, _args: any, { headers }: any) {
-          await global.isAuthorization(headers);
-          const updateData = {
-            ..._args.input,
-          }
-          let results;
-          await SessionModel.findOneAndUpdate({_id:_args._id}, updateData, {new: true})
-          .then((result) => {
-              results = result;
-          }).catch((error) => {
             results = null;
+            throw new Error(error._message);
           });
           return results;
         },
+
+        async updateSession(_parent: any, _args: any, { headers }: any) {
+          await global.isAuthorization(headers);
+
+          const interviewImages = _args.input.interview.repeptorImages;
+          const repeptorImages:string[] = [];
+          if (interviewImages) {
+            await Promise.all(              
+              interviewImages.map(async(row:string) => {
+                if (row.includes(`${process.env.UPLOAD_TEMP_DIR}`)){
+                  const tempFilePath = path.join(path.resolve(), row)
+                  if (fs.existsSync(tempFilePath)) {
+                    const fileName = path.basename(tempFilePath)
+                    const fileType = path.extname(fileName)
+                    const newFileName = (await global.generateRandomString(8)) + fileType;  
+                    const repeptorDirPath = `${process.env.UPLOAD_DIR}repeptors/`;
+                    await fs.mkdirSync(path.join(path.resolve(), repeptorDirPath), { recursive: true });
+                    var newPath = path.join(path.resolve(), `${repeptorDirPath}${newFileName}`)
+                    await fs.rename(tempFilePath, newPath, function (err) {
+                      // delete temp directory
+                      fs.rm(path.dirname(tempFilePath), { recursive: true }, (err) => {});              
+                    })
+                    repeptorImages.push(`${repeptorDirPath}${newFileName}`);
+                  }
+                }else{                  
+                  repeptorImages.push(row);
+                }
+              })
+            );
+          }
+
+          const newData = {
+            ..._args.input, interview:{..._args.input.interview, repeptorImages}
+          }
+          
+          let results;
+          await SessionModel.findOneAndUpdate({_id:_args._id}, newData, {new: true})
+          .then((result) => {
+            results = result;
+          }).catch((error) => {
+            results = error
+            throw new Error(error._message);
+          });
+          return results;
+        },
+
         async deleteSession(_parent: any, _args: any, { headers }: any) {
         await global.isAuthorization(headers);
           let results;

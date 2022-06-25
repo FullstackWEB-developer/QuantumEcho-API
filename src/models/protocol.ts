@@ -1,6 +1,7 @@
-import { prop, Ref} from '@typegoose/typegoose';
+import { ModelOptions, prop, Ref} from '@typegoose/typegoose';
 import { Operator } from './operator';
 
+@ModelOptions({ schemaOptions: { timestamps: true } })
 export class Protocol {
 
     // @prop({type: () => mongoose.Types.ObjectId})
@@ -11,10 +12,8 @@ export class Protocol {
     @prop({type: () => String, default: ''})
     public coordinator!: string;
 
-    // @prop({ref: () =>  Operator})
-    // public teamOperators!: Ref<Operator>[];
-    @prop({type: () => String, default: []})
-    public teamOperators!: string[];
+    @prop({ref: () =>  Operator})
+    public teamOperators!: Ref<Operator>[];
 
     @prop({type: () => String, required: true})
     public protocolName!: string;

@@ -38,6 +38,7 @@ const operatorResolver = {
           });
           return result;
         },
+        
         async updateOperator(_parent: any, _args: any, { headers }: any) {
           await global.isAuthorization(headers);
           const updateData = {
@@ -48,8 +49,9 @@ const operatorResolver = {
             let _path = path.join(path.resolve(), updateData.profileImage)
             if (fs.existsSync(_path)) {
               var fileName = path.basename(_path)
-              let fileType = path.extname(fileName)
-              const newFileName = _args.operatorId + Date.now() + fileType
+              var fileType = path.extname(fileName)
+              // const newFileName = _args.operatorId + Date.now() + fileType
+              const newFileName = (await global.generateRandomString(8)) + fileType;
               const operatorDirPath = `${process.env.UPLOAD_OPERATOR_PROFILE_DIR}`
               fs.mkdirSync(path.join(path.resolve(), operatorDirPath), { recursive: true });
               var newPath = path.join(path.resolve(), `${operatorDirPath}${newFileName}`)

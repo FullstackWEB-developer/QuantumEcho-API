@@ -1,4 +1,4 @@
-import { mongoose, prop, Ref} from '@typegoose/typegoose';
+import { ModelOptions, mongoose, prop, Ref} from '@typegoose/typegoose';
 import Module from './module';
 
 enum Typology {
@@ -12,6 +12,7 @@ enum Status {
     UNPUBLISHED = 'unpublished'
 }
 
+@ModelOptions({ schemaOptions: { timestamps: true } })
 export class Subscrib {
 
     // @prop()

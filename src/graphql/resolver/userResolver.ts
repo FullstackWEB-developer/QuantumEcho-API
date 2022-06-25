@@ -38,27 +38,28 @@ const userResolver = {
           });
           return result;
         },
+
         async updateUser(_parent: any, _args: any, { headers }: any) {
         // await global.isAuthorization(headers, false);
           const updateData = {
             ..._args.input,
-            // password: crypto.createHash('sha256').update(_args.input.password).digest('hex'),
+            password: crypto.createHash('sha256').update(_args.input.password).digest('hex'),
           };
           let results;
-          if (await DBModel.findOne({email: _args.email})) {
-            await DBModel.findOneAndUpdate({email:_args.email}, updateData, {new: true})
+          if (await DBModel.findOne({cognitoId: updateData.cognitoId})) {
+            await DBModel.findOneAndUpdate({cognitoId:updateData.cognitoId}, updateData, {new: true})
             .then(async (result) => {
-              results = await OperatorModel.findOne({email:_args.email});
+              results = await OperatorModel.findOne({operatorId:updateData.cognitoId});
             }).catch((error) => {
-              results = null;
+              results = error;
             });
           }else{
             await DBModel.create(updateData)
             .then((result) => {
-              results = result;
+              results = null;
             })
             .catch((error) => {
-              results = null;
+              results = error;
             });
           }
           

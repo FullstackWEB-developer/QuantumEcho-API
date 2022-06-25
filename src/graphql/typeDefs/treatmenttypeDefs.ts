@@ -1,7 +1,7 @@
 
 const typeDefs = `
 type Treatment {
-    _id:ID!
+    _id:ID
     treatmentName:String!
     treatmentGroup:String!
     treatmentSubGroup:String!

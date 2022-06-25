@@ -1,4 +1,4 @@
-import { prop, Ref} from '@typegoose/typegoose';
+import { ModelOptions, prop, Ref} from '@typegoose/typegoose';
 import  { DailySurvey } from './dailySurvey';
 import { Project } from './project';
 
@@ -32,6 +32,7 @@ class ContactInfo {
 
 }
 
+@ModelOptions({ schemaOptions: { timestamps: true } })
 export class Customer {
 
 // NEED TO WORK ON THIS

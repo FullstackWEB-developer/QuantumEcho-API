@@ -1,6 +1,4 @@
-import { prop } from '@typegoose/typegoose';
-
-
+import { ModelOptions, prop } from '@typegoose/typegoose';
 
 class Questions {
 
@@ -16,6 +14,7 @@ class Questions {
 
 }
 
+@ModelOptions({ schemaOptions: { timestamps: true } })
 export class DailySurvey {
 
     // @prop({type: () => mongoose.Types.ObjectId})

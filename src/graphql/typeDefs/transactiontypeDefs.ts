@@ -1,7 +1,7 @@
 
 const typeDefs = `
 type Transaction{
-    _id:ID!
+    _id:ID
     subscribs:[Subscrib]
     operatorBuyer:Operator
 }

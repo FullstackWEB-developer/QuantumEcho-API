@@ -26,20 +26,20 @@ app.use(
     graphiql: true,
   }),
   
-  // bodyParser.json({
-  //   limit: '50mb'
-  // }),
-  // bodyParser.urlencoded({
-  //   limit: '50mb',
-  //   parameterLimit: 100000,
-  //   extended: true 
-  // })
+  bodyParser.json({
+    limit: '50mb'
+  }),
+  bodyParser.urlencoded({
+    limit: '50mb',
+    parameterLimit: 100000,
+    extended: true 
+  }),
 );
 
 // app.use(bodyParser.json({limit: 1000 * 1024}))
 
-app.use(express.json({limit: '25mb'}));
-app.use(express.urlencoded({limit: '25mb'}));
+// app.use(express.json({limit: '25mb'}));
+// app.use(express.urlencoded({limit: '25mb'}));
 
 app.use(express.static('./'));
 

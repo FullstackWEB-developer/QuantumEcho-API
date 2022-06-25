@@ -1,7 +1,8 @@
-import { prop, Ref} from '@typegoose/typegoose';
+import { DocumentType, ModelOptions, prop, Ref} from '@typegoose/typegoose';
 import { Operator } from './operator';
 import { Session } from './session';
 
+@ModelOptions({ schemaOptions: { timestamps: true } })
 export class Project {
 
     // @prop({type: () => String})

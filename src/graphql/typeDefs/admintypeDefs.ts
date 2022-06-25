@@ -1,6 +1,6 @@
 const typeDefs =`
 type Admin {
-    _id:ID!
+    _id:ID
     phoneNumber:String
     address:Address
     firstName:String

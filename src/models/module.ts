@@ -1,5 +1,6 @@
-import { prop} from '@typegoose/typegoose';
+import { ModelOptions, prop} from '@typegoose/typegoose';
 
+@ModelOptions({ schemaOptions: { timestamps: true } })
 export class  Module{
 
     // @prop({type: () => mongoose.Types.ObjectId})

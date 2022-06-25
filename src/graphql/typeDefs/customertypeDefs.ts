@@ -1,7 +1,7 @@
 
 const typeDefs = `
 type Customer{
-    _id:ID!
+    _id:ID
     customerId:String
     firstName:String
     lastName:String

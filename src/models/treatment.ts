@@ -1,8 +1,7 @@
 
-import { prop, Ref, getModelForClass } from "@typegoose/typegoose";
-import mongoose from "mongoose";
+import { prop, ModelOptions } from "@typegoose/typegoose";
 
-
+@ModelOptions({ schemaOptions: { timestamps: true } })
 export class Treatment {
 
     // @prop({type: () => mongoose.Types.ObjectId})
@@ -24,8 +23,5 @@ export class Treatment {
     public fractals!: string[];
 
 }
-
-
-// const TreatmentModel = getModelForClass(Treatment);
 
 export default Treatment;
