@@ -8,15 +8,22 @@ type Protocol {
     protocolName:String
     createdDate:String
 }
+
 input ProtocolInput {
     coordinator:String!
     teamOperators:[String]
     protocolName:String
 }
 
+type ProtocolResult{
+  lists:[Protocol]
+  totalCount:Int
+  perCount:Int
+}
+
 type Query {
     protocolCount : Int!
-    protocols(input:ProtocolInput, sort:String):[Protocol]
+    protocols(protocolName:String, pageNum:Int):ProtocolResult
     protocol(_id: ID!): Protocol
   }
   

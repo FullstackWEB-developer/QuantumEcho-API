@@ -52,6 +52,7 @@ type Query {
     customerCount : Int!
     customers(condition:CustomerInput, pageNum:Int):CustomersResult
     customer(customerId: String!): Customer
+    customerById(_id: ID!): Customer
 }
 
 type Mutation {
@@ -62,6 +63,11 @@ type Mutation {
       customerId:String!
       input:CustomerInput
     ):Customer
+
+    updateCustomerById(
+        _id:String!
+        input:CustomerInput
+      ):Customer
   
     deleteCustomer(_id:ID!):Message!
 

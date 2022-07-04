@@ -7,10 +7,8 @@ export class Protocol {
     // @prop({type: () => mongoose.Types.ObjectId})
     // public protocolId!: string;  // mongoose will add _id field for us that we consider as  protocolId
 
-    // @prop({ref: () =>  Operator})
-    // public coordinator!: Ref<Operator>; // we refer to one operator(coordinator), he can add operator to session
-    @prop({type: () => String, default: ''})
-    public coordinator!: string;
+    @prop({ref: () =>  Operator})
+    public coordinator!: Ref<Operator>; // we refer to one operator(coordinator), he can add operator to session
 
     @prop({ref: () =>  Operator})
     public teamOperators!: Ref<Operator>[];
@@ -25,8 +23,5 @@ export class Protocol {
     // public treatments!: Ref<Treatment>[];
     
 }
-
-
-// const ProtocolModel = getModelForClass(Protocol);
 
 export default Protocol;

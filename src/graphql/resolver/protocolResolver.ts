@@ -10,9 +10,14 @@ const protocolResolver = {
       },
       async protocols (_parent: any, _args: any, { headers }: any) {
         await global.isAuthorization(headers);
-        let lists = [];
-        lists = await ProtocolModel.find(_args.input);
-        return lists;
+        const lists = await ProtocolModel.find({protocolName:{$regex: _args.protocolName ? _args.protocolName : ''}});        
+        
+        var pageNum:number = 0;
+        if (_args.pageNum && _args.pageNum > 0) {
+          pageNum = _args.pageNum - 1;
+          return {lists:lists.slice(pageNum*Number(process.env.PAGE_PER_COUNT), (pageNum+1) * Number(process.env.PAGE_PER_COUNT)), totalCount:lists.length, perCount:Number(process.env.PAGE_PER_COUNT)};
+        }
+        return {lists:lists, totalCount:lists.length, perCount:Number(process.env.PAGE_PER_COUNT)};
       },
       async protocol (_parent: any, _args: any, { headers }: any) {
         await global.isAuthorization(headers);

@@ -69,7 +69,7 @@ export class Customer {
     @prop({required: true, type: () => String})
     public bioSex!: string;
 
-    @prop({type: () => Date})
+    @prop({type: () => Date, default:Date.now()})
     public lastAccess?: Date;
 
     @prop({ref: () => DailySurvey})
