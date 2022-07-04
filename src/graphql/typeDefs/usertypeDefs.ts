@@ -1,5 +1,6 @@
 
 const typeDefs = `
+
 type User {
     _id:ID!
     cognitoId:String
@@ -9,6 +10,7 @@ type User {
     accessToken:String
     status:String
 }
+
 input UserInput{
     email:String
     cognitoId:String
@@ -32,6 +34,11 @@ type Mutation {
         email:String!
         input:UserInput
     ):Operator
+
+    updateUserWithCustomer(
+        email:String!
+        input:UserInput
+    ):Customer
   
     deleteUser(email:String!):Message!
 

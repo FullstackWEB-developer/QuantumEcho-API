@@ -1,5 +1,5 @@
 import DBModel from "../../models/user";
-import { OperatorModel } from "../../models/dbmodel";
+import { OperatorModel, CustomerModel } from '../../models/dbmodel';
 const global = require('../../global');
 const crypto = require('crypto');
 
@@ -40,7 +40,7 @@ const userResolver = {
         },
 
         async updateUser(_parent: any, _args: any, { headers }: any) {
-        // await global.isAuthorization(headers, false);
+          await global.isAuthorization(headers, false);
           const updateData = {
             ..._args.input,
             password: crypto.createHash('sha256').update(_args.input.password).digest('hex'),
@@ -65,8 +65,36 @@ const userResolver = {
           
           return results;
         },
+
+        async updateUserWithCustomer(_parent: any, _args: any, { headers }: any) {
+            await global.isAuthorization(headers, false);
+            const updateData = {
+              ..._args.input,
+              password: crypto.createHash('sha256').update(_args.input.password).digest('hex'),
+            };
+            let results;
+            if (await DBModel.findOne({cognitoId: updateData.cognitoId})) {
+              await DBModel.findOneAndUpdate({cognitoId:updateData.cognitoId}, updateData, {new: true})
+              .then(async (result) => {
+                results = await CustomerModel.findOne({customerId:updateData.cognitoId});
+              }).catch((error) => {
+                results = error;
+              });
+            }else{
+              await DBModel.create(updateData)
+              .then((result) => {
+                results = null;
+              })
+              .catch((error) => {
+                results = error;
+              });
+            }
+            
+            return results;
+          },
+
         async deleteUser(_parent: any, _args: any, { headers }: any) {
-        await global.isAuthorization(headers);
+          await global.isAuthorization(headers);
           let results;
           await DBModel.findOneAndDelete({email:_args.email})
           .then((result) => {

@@ -30,7 +30,7 @@ const customerResolver = {
       
       async customer (_parent: any, _args: any, { headers }: any) {
         await global.isAuthorization(headers);
-        const result = await CustomerModel.findOne({_id: _args._id});
+        const result = await CustomerModel.findOne({customerId: _args.customerId});
         return result;
       }
     },
@@ -86,23 +86,22 @@ const customerResolver = {
 
         async updateCustomer(_parent: any, _args: any, { headers }: any) {
           await global.isAuthorization(headers);
-          const postData = {
+          const updateData = {
             ..._args.input,
-          }
-          
-          let newData:any
-          if (postData.profileImage){
-            let _path = path.join(path.resolve(), postData.profileImage)
+          }          
+          let newCustomer
+          if (updateData.profileImage){
+            let _path = path.join(path.resolve(), updateData.profileImage)
             if (fs.existsSync(_path)) {
               var fileName = path.basename(_path)
-              let fileType = path.extname(fileName)
-              const newFileName = Date.now() + fileType
-              const clientDirPath = `${process.env.UPLOAD_CLIENT_PROFILE_DIR}`
-              fs.mkdirSync(path.join(path.resolve(), clientDirPath), { recursive: true });
-              var newPath = path.join(path.resolve(), `${clientDirPath}${newFileName}`)
-              newData = {
-                ...postData,
-                profileImage:`${clientDirPath}${newFileName}`,
+              var fileType = path.extname(fileName)
+              const newFileName = (await global.generateRandomString(8)) + fileType;
+              const customerDirPath = `${process.env.UPLOAD_CLIENT_PROFILE_DIR}`
+              fs.mkdirSync(path.join(path.resolve(), customerDirPath), { recursive: true });
+              var newPath = path.join(path.resolve(), `${customerDirPath}${newFileName}`)
+              newCustomer = {
+                ...updateData,
+                profileImage:`${customerDirPath}${newFileName}`,
               }
               fs.rename(_path, newPath, function (err) {
                 if (err) throw err
@@ -110,24 +109,38 @@ const customerResolver = {
                 fs.rm(path.dirname(_path), { recursive: true }, (err) => {});              
               })
             }else{
-              newData = {
-                ...postData,
+              newCustomer = {
+                ...updateData,
+                lastAccess:Date.now(),
               }
             }
           }else{
-            newData = {
-              ...postData,
+            newCustomer = {
+              ...updateData,
+              lastAccess:Date.now(),              
             }
           }
 
-          let results;
-          await CustomerModel.findOneAndUpdate({_id:_args._id}, newData, {new: true})
-          .then((result:any) => {
-              results = {message:"Successfully created.", _id:result._id, profilePath:result.profileImage};
-          }).catch((error:any) => {
-            results = {message:error._message};
-          });
-          return results;
+          if (await CustomerModel.findOne({customerId: _args.customerId})) {
+            let results;
+            await CustomerModel.findOneAndUpdate({customerId:_args.customerId}, newCustomer, {new: true})
+            .then((result:any) => {
+                results = result;
+            }).catch((error:any) => {
+              results = null;
+            });
+            return results;
+          }else{
+            let results;
+            await CustomerModel.create(newCustomer)
+            .then((result:any) => {
+              results = result
+            })
+            .catch((error:any) => {
+              results = null;
+            });
+            return results;
+          }
         },
 
         async deleteCustomer(_parent: any, _args: any, { headers }: any) {

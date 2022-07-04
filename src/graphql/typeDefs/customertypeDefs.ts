@@ -40,7 +40,7 @@ type CustomersResult{
     lists:[Customer]
     totalCount:Int
     perCount:Int
-  }
+}
 
 type CustomerResultMessage {
     message:String!
@@ -51,7 +51,7 @@ type CustomerResultMessage {
 type Query {
     customerCount : Int!
     customers(condition:CustomerInput, pageNum:Int):CustomersResult
-    customer(_id: ID!): Customer
+    customer(customerId: String!): Customer
 }
 
 type Mutation {
@@ -59,9 +59,9 @@ type Mutation {
     postCustomer(input: CustomerInput): CustomerResultMessage
     
     updateCustomer(
-      _id:ID!
+      customerId:String!
       input:CustomerInput
-    ):CustomerResultMessage
+    ):Customer
   
     deleteCustomer(_id:ID!):Message!
 
