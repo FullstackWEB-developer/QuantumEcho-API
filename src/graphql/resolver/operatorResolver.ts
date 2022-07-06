@@ -18,7 +18,7 @@ const operatorResolver = {
       },
       async operator (_parent: any, _args: any, { headers }: any) {
         await global.isAuthorization(headers);
-        const result = await OperatorModel.findOne({operatorId: _args.operatorId}).populate('customers').populate('protocols');
+        const result = await OperatorModel.findOne({operatorId: _args.operatorId}).populate('customers');
         return result;
       }
     },

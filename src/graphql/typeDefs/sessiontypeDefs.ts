@@ -14,11 +14,12 @@ type Session{
     effects:String
     selectedTreatments:[String]
     treatmentSurveys:[Treatment]
+    createdAt:String
 }
 
 input SessionInput{
     _id:ID
-    teamMembers:[OperatorInput]
+    teamMembers:[String]
     sessionTitle:String
     sessionInfo:String
     sessionStartDate:String

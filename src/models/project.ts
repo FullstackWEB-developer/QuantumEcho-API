@@ -1,4 +1,4 @@
-import { DocumentType, ModelOptions, prop, Ref} from '@typegoose/typegoose';
+import { ModelOptions, prop, Ref} from '@typegoose/typegoose';
 import { Operator } from './operator';
 import { Session } from './session';
 

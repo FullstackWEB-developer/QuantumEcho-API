@@ -1,5 +1,5 @@
 
-import {CustomerModel} from "../../models/dbmodel";
+import { CustomerModel, OperatorModel, SessionModel } from '../../models/dbmodel';
 const global = require('../../global');
 
 import fs from 'fs';
@@ -16,14 +16,46 @@ const customerResolver = {
 
       async customers (_parent: any, _args: any, { headers }: any) {
         await global.isAuthorization(headers);
-        const lists = await CustomerModel.find();
+        const lists = await CustomerModel.find().populate('projects'); 
 
+        const initLists:any[] = [];
+        await Promise.all(
+          lists.map(async(customer:any) => {
+            const projects:any[] = [];
+            await Promise.all(  
+              customer.projects.map(async(project:any) => {
+                const coordinator = await OperatorModel.findOne({_id:project.coordinator}).exec() as any;
+                project.coordinator = coordinator
+                const sessions:any[] = [];
+                await Promise.all(
+                  project.sessions.map(async(s:any) => {
+                    const session = await SessionModel.findById(s._id) as any;
+                    sessions.push(session);
+                  })
+                );
+                project.sessions = sessions.sort(function (a:any, b:any) {
+                  return b.createdAt - a.createdAt;
+                });
+                projects.push(project);
+              })
+            );
+            customer.projects = projects.sort(function (a:any, b:any) {
+              return a.createdAt - b.createdAt;
+            });
+            initLists.push(customer);
+          })
+        );
+
+        const sortLists = initLists.sort(function (a:any, b:any) {
+          return b.createdAt - a.createdAt;
+        }) as any;
+        
         var pageNum:number = 0;
         if (_args.pageNum && _args.pageNum > 0) {
             pageNum = _args.pageNum - 1;
-            return {lists:lists.slice(pageNum*Number(process.env.PAGE_PER_COUNT), (pageNum+1) * Number(process.env.PAGE_PER_COUNT)), totalCount:lists.length, perCount:Number(process.env.PAGE_PER_COUNT)};
+            return {lists:sortLists.slice(pageNum*Number(process.env.PAGE_PER_COUNT), (pageNum+1) * Number(process.env.PAGE_PER_COUNT)), totalCount:sortLists.length, perCount:Number(process.env.PAGE_PER_COUNT)};
         }else{
-          return {lists, totalCount:lists.length, perCount:Number(process.env.PAGE_PER_COUNT)};
+          return {lists:sortLists, totalCount:sortLists.length, perCount:Number(process.env.PAGE_PER_COUNT)};
         }
         
       },
@@ -36,8 +68,31 @@ const customerResolver = {
 
       async customerById (_parent: any, _args: any, { headers }: any) {
         await global.isAuthorization(headers);
-        const result = await CustomerModel.findOne({_id: _args._id});
-        return result;
+        const customer = await CustomerModel.findOne({_id: _args._id}).populate('projects') as any;
+        
+        const projects:any[] = [];
+        await Promise.all(          
+          customer.projects.map(async(project:any) => {
+            const coordinator = await OperatorModel.findOne({_id:project.coordinator}).exec() as any;
+            project.coordinator = coordinator
+            const sessions:any[] = [];
+            await Promise.all(
+              project.sessions.map(async(s:any) => {
+                const session = await SessionModel.findById(s._id) as any;
+                sessions.push(session);
+              })
+            );
+            project.sessions = sessions.sort(function (a:any, b:any) {
+              return b.createdAt - a.createdAt;
+            });
+            projects.push(project);
+          })
+        );
+        customer.projects = projects.sort(function (a:any, b:any) {
+          return a.createdAt - b.createdAt;
+        });
+        
+        return customer;
       }
       
     },
@@ -54,7 +109,6 @@ const customerResolver = {
             if (fs.existsSync(_path)) {
               var fileName = path.basename(_path)
               let fileType = path.extname(fileName)
-              // const newFileName = Date.now() + fileType
               const newFileName = (await global.generateRandomString(8)) + fileType;
               const clientDirPath = `${process.env.UPLOAD_CLIENT_PROFILE_DIR}`
               fs.mkdirSync(path.join(path.resolve(), clientDirPath), { recursive: true });
@@ -78,15 +132,14 @@ const customerResolver = {
               ...postData,
             }
           }
+          
           let result;
           await CustomerModel.create(newData)
           .then((res:any) => {
             result = {message:"Successfully created.", _id:res._id};
-            // result = res;
           })
           .catch((error:any) => {
             result = {message:error._message};
-            // result = null;
           });
           return result;
         },

@@ -10,7 +10,7 @@ type Project{
 input ProjectInput{
     projectName:String
     coordinator:String
-    sessions:[String]
+    sessions:[SessionInput]
 }
 
 type ProjectResult{

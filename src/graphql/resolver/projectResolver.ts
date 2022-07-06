@@ -10,37 +10,33 @@ const projectResolver = {
       },
       async projects (_parent: any, _args: any, { headers }: any) {
         await global.isAuthorization(headers);
-        const lists = await ProjectModel.find();    
-        lists.sort(function (a:any, b:any) {
+        const allLists = await ProjectModel.find(_args.condition).populate('sessions');    
+        allLists.sort(function (a:any, b:any) {
           return b.createdAt - a.createdAt;
         });
 
-        let tempArr:any[] = [];
+        let lists:any[] = [];
         await Promise.all(
-          lists.map(async(row) => {
+          allLists.map(async(row:any) => {
             row.coordinator = await OperatorModel.findOne({_id: row.coordinator}) as any;
-            const sessions = row.sessions as any[]
-            let tempSessions:any = [];
-            await Promise.all(
-              sessions?.map(async(element) => {
-                const sessionData = await SessionModel.findOne({_id:element}) as any;
-                tempSessions.push(sessionData);
-              })              
-            );
+            const sessions = row.sessions.sort(function (a:any, b:any) {
+              return b.createdAt - a.createdAt;
+            });
 
-            row.sessions = tempSessions;
+            row.sessions = sessions;
                        
-            tempArr.push(row);
+            lists.push(row);
           })
         );
 
         var pageNum:number = 0;
         if (_args.pageNum && _args.pageNum > 0) {
           pageNum = _args.pageNum - 1;
-          return {lists:tempArr.slice(pageNum*Number(process.env.PAGE_PER_COUNT), (pageNum+1) * Number(process.env.PAGE_PER_COUNT)), totalCount:tempArr.length, perCount:Number(process.env.PAGE_PER_COUNT)};
+          return {lists:lists.slice(pageNum*Number(process.env.PAGE_PER_COUNT), (pageNum+1) * Number(process.env.PAGE_PER_COUNT)), totalCount:lists.length, perCount:Number(process.env.PAGE_PER_COUNT)};
         }
-        return {lists:tempArr, totalCount:tempArr.length, perCount:Number(process.env.PAGE_PER_COUNT)};
+        return {lists:lists, totalCount:lists.length, perCount:Number(process.env.PAGE_PER_COUNT)};
       },
+
       async project (_parent: any, _args: any, { headers }: any) {
         await global.isAuthorization(headers);
         const result = await ProjectModel.findOne({_id: _args._id});
@@ -50,10 +46,29 @@ const projectResolver = {
     Mutation: {
         async postProject(_parent: any, _args: any, { headers }: any) {
           await global.isAuthorization(headers);
+          const sessions = _args.input.sessions;
           const newData = {
-            ..._args.input,
+            projectName:_args.input.projectName,
+            coordinator:_args.input.coordinator,
           }
-          return await ProjectModel.create(newData)
+          // create project
+          const result = await ProjectModel.create(newData);
+
+          // create session and update project's sessions
+          Promise.all(
+            sessions.map(async(row:any) => {
+              const session = {sessionTitle:row.sessionTitle, teamMembers:row.teamMembers}
+              await SessionModel.create(session).then(async docSession => {
+                await ProjectModel.findByIdAndUpdate(
+                  result._id,
+                  {$push: {sessions:docSession._id}},
+                  { new: true, useFindAndModify: false }
+                );
+              })
+            })
+          );
+          
+          return result;
         },
 
         async updateProject(_parent: any, _args: any, { headers }: any) {
