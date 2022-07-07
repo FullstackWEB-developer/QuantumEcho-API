@@ -10,31 +10,23 @@ const projectResolver = {
       },
       async projects (_parent: any, _args: any, { headers }: any) {
         await global.isAuthorization(headers);
-        const allLists = await ProjectModel.find(_args.condition).populate('sessions');    
-        allLists.sort(function (a:any, b:any) {
-          return b.createdAt - a.createdAt;
-        });
 
-        let lists:any[] = [];
-        await Promise.all(
-          allLists.map(async(row:any) => {
-            row.coordinator = await OperatorModel.findOne({_id: row.coordinator}) as any;
-            const sessions = row.sessions.sort(function (a:any, b:any) {
-              return b.createdAt - a.createdAt;
-            });
-
-            row.sessions = sessions;
-                       
-            lists.push(row);
+        const allLists = await ProjectModel.find(_args.condition)
+        .populate('coordinator')
+        .populate(
+          {
+            path:'sessions', 
+            options:{sort:{'createdAt':'desc'}}, 
+            populate:{path:'teamMembers'}
           })
-        );
+        .sort({'createdAt':'desc'});
 
         var pageNum:number = 0;
         if (_args.pageNum && _args.pageNum > 0) {
           pageNum = _args.pageNum - 1;
-          return {lists:lists.slice(pageNum*Number(process.env.PAGE_PER_COUNT), (pageNum+1) * Number(process.env.PAGE_PER_COUNT)), totalCount:lists.length, perCount:Number(process.env.PAGE_PER_COUNT)};
+          return {lists:allLists.slice(pageNum*Number(process.env.PAGE_PER_COUNT), (pageNum+1) * Number(process.env.PAGE_PER_COUNT)), totalCount:allLists.length, perCount:Number(process.env.PAGE_PER_COUNT)};
         }
-        return {lists:lists, totalCount:lists.length, perCount:Number(process.env.PAGE_PER_COUNT)};
+        return {lists:allLists, totalCount:allLists.length, perCount:Number(process.env.PAGE_PER_COUNT)};
       },
 
       async project (_parent: any, _args: any, { headers }: any) {
@@ -72,18 +64,43 @@ const projectResolver = {
         },
 
         async updateProject(_parent: any, _args: any, { headers }: any) {
-        await global.isAuthorization(headers);
-          const updateData = {
-            ..._args.input,
+          await global.isAuthorization(headers);
+
+          const sessions = _args.input.sessions;
+          const newData = {
+            projectName:_args.input.projectName,
+            coordinator:_args.input.coordinator,
+            sessions:[],
           }
-          let results;
-          await ProjectModel.findOneAndUpdate({_id:_args._id}, updateData, {new: true})
-          .then((result) => {
-              results = result;
-          }).catch((error) => {
-            results = null;
-          });
-          return results;
+          // update project
+          const result = await ProjectModel.findOneAndUpdate({_id:_args._id}, newData, {new:true}) as any;
+
+          // update session and update project's sessions
+          Promise.all(
+            sessions.map(async(row:any) => {
+              console.log("🚀 ~ file: projectResolver.ts ~ line 99 ~ sessions.map ~ row", row)
+              const session = {sessionTitle:row.sessionTitle, teamMembers:row.teamMembers}
+              if (row._id === '') {
+                await SessionModel.create(session).then(async docSession => {
+                  await ProjectModel.findByIdAndUpdate(
+                    result._id,
+                    {$push: {sessions:docSession._id}},
+                    { new: true, useFindAndModify: false }
+                  );
+                })
+              }else{
+                await SessionModel.findOneAndUpdate({_id:row._id}, session, {new: true}).then(async docSession => {
+                  await ProjectModel.findByIdAndUpdate(
+                    result._id,
+                    {$push: {sessions: row._id}},
+                    { new: true, useFindAndModify: false }
+                  );
+                })
+              }
+            })
+          );
+          
+          return result;
         },
         
         async deleteProject(_parent: any, _args: any, { headers }: any) {

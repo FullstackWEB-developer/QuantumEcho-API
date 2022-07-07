@@ -3,18 +3,6 @@ import { Customer } from './customer';
 import { Protocol } from './protocol';
 import { Subscrib } from './subscrib';
 
-enum Sex {
-    MALE = 'male',
-    FEMALE = 'female',
-    OTHER = "other"
-} 
-
-enum Role {
-    GENERAL_MANAGER = 'general_manager',
-    PROJECT_MANAGER = 'project_manager',
-    WELLNESS_OPERATOR = 'wellness_operator'
-}
-
 class ContactInfo {
 
     @prop({type: () => String, required: true })
@@ -92,7 +80,5 @@ export class Operator {
     public protocols?: Ref<Protocol>[];
 
 }   
-            
-// const OperatorModel = getModelForClass(Operator);
 
-export default Operator;
+export default Operator

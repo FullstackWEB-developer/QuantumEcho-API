@@ -2,15 +2,18 @@ import {ProtocolModel} from "../../models/dbmodel";
 const global = require('../../global');
 
 const protocolResolver = {
+
     Query: {
+
       async protocolCount (_parent: any, _args: any, { headers }: any) {
         await global.isAuthorization(headers);
         const count = await ProtocolModel.countDocuments(_args);
         return count;
       },
+
       async protocols (_parent: any, _args: any, { headers }: any) {
         await global.isAuthorization(headers);
-        const lists = await ProtocolModel.find({protocolName:{$regex: _args.protocolName ? _args.protocolName : ''}});        
+        const lists = await ProtocolModel.find({coordinator:_args.condition.coordinator, protocolName:{$regex:_args.condition.protocolName}});
         
         var pageNum:number = 0;
         if (_args.pageNum && _args.pageNum > 0) {
@@ -19,15 +22,18 @@ const protocolResolver = {
         }
         return {lists:lists, totalCount:lists.length, perCount:Number(process.env.PAGE_PER_COUNT)};
       },
+
       async protocol (_parent: any, _args: any, { headers }: any) {
         await global.isAuthorization(headers);
         const result = await ProtocolModel.findOne({_id: _args._id});
         return result;
       }
     },
+
     Mutation: {
+
         async postProtocol(_parent: any, _args: any, { headers }: any) {
-        await global.isAuthorization(headers);
+          await global.isAuthorization(headers);
           const newData = {
             ..._args.input,
           }
@@ -41,8 +47,9 @@ const protocolResolver = {
           });
           return result;
         },
+
         async updateProtocol(_parent: any, _args: any, { headers }: any) {
-        await global.isAuthorization(headers);
+          await global.isAuthorization(headers);
           const updateData = {
             ..._args.input,
           }
@@ -55,8 +62,9 @@ const protocolResolver = {
           });
           return results;
         },
+
         async deleteProtocol(_parent: any, _args: any, { headers }: any) {
-        await global.isAuthorization(headers);
+          await global.isAuthorization(headers);
           let results;
           await ProtocolModel.findOneAndDelete({_id:_args._id})
           .then((result) => {

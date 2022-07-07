@@ -15,82 +15,64 @@ const customerResolver = {
       },
 
       async customers (_parent: any, _args: any, { headers }: any) {
-        await global.isAuthorization(headers);
-        const lists = await CustomerModel.find().populate('projects'); 
-
-        const initLists:any[] = [];
-        await Promise.all(
-          lists.map(async(customer:any) => {
-            const projects:any[] = [];
-            await Promise.all(  
-              customer.projects.map(async(project:any) => {
-                const coordinator = await OperatorModel.findOne({_id:project.coordinator}).exec() as any;
-                project.coordinator = coordinator
-                const sessions:any[] = [];
-                await Promise.all(
-                  project.sessions.map(async(s:any) => {
-                    const session = await SessionModel.findById(s._id) as any;
-                    sessions.push(session);
-                  })
-                );
-                project.sessions = sessions.sort(function (a:any, b:any) {
-                  return b.createdAt - a.createdAt;
-                });
-                projects.push(project);
-              })
-            );
-            customer.projects = projects.sort(function (a:any, b:any) {
-              return a.createdAt - b.createdAt;
-            });
-            initLists.push(customer);
-          })
-        );
-
-        const sortLists = initLists.sort(function (a:any, b:any) {
-          return b.createdAt - a.createdAt;
-        }) as any;
+        await global.isAuthorization(headers);        
+        const lists = await CustomerModel.find()
+        .populate({
+          path:'projects', 
+          options:{sort:{'createdAt':'desc'}},
+          populate:[{
+              path:'sessions', 
+              options:{sort:{'createdAt':'desc'}},
+              populate:{path:'teamMembers'}
+            },
+            {
+              path:'coordinator'
+          }]
+        });
         
         var pageNum:number = 0;
         if (_args.pageNum && _args.pageNum > 0) {
             pageNum = _args.pageNum - 1;
-            return {lists:sortLists.slice(pageNum*Number(process.env.PAGE_PER_COUNT), (pageNum+1) * Number(process.env.PAGE_PER_COUNT)), totalCount:sortLists.length, perCount:Number(process.env.PAGE_PER_COUNT)};
+            return {lists:lists.slice(pageNum*Number(process.env.PAGE_PER_COUNT), (pageNum+1) * Number(process.env.PAGE_PER_COUNT)), totalCount:lists.length, perCount:Number(process.env.PAGE_PER_COUNT)};
         }else{
-          return {lists:sortLists, totalCount:sortLists.length, perCount:Number(process.env.PAGE_PER_COUNT)};
+          return {lists:lists, totalCount:lists.length, perCount:Number(process.env.PAGE_PER_COUNT)};
         }
         
       },
       
       async customer (_parent: any, _args: any, { headers }: any) {
         await global.isAuthorization(headers);
-        const result = await CustomerModel.findOne({customerId: _args.customerId});
+        const result = await CustomerModel.findOne({customerId: _args.customerId})
+                                          .populate({
+                                            path:'projects', 
+                                            options:{sort:{'createdAt':'desc'}},
+                                            populate:[{
+                                                path:'sessions', 
+                                                options:{sort:{'createdAt':'desc'}},
+                                                populate:{path:'teamMembers'}
+                                              },
+                                              {
+                                                path:'coordinator'
+                                            }]
+                                          });
         return result;
       },
 
       async customerById (_parent: any, _args: any, { headers }: any) {
         await global.isAuthorization(headers);
-        const customer = await CustomerModel.findOne({_id: _args._id}).populate('projects') as any;
-        
-        const projects:any[] = [];
-        await Promise.all(          
-          customer.projects.map(async(project:any) => {
-            const coordinator = await OperatorModel.findOne({_id:project.coordinator}).exec() as any;
-            project.coordinator = coordinator
-            const sessions:any[] = [];
-            await Promise.all(
-              project.sessions.map(async(s:any) => {
-                const session = await SessionModel.findById(s._id) as any;
-                sessions.push(session);
-              })
-            );
-            project.sessions = sessions.sort(function (a:any, b:any) {
-              return b.createdAt - a.createdAt;
-            });
-            projects.push(project);
-          })
-        );
-        customer.projects = projects.sort(function (a:any, b:any) {
-          return a.createdAt - b.createdAt;
-        });
+        const customer = await CustomerModel.findOne({_id: _args._id})
+                                            .populate({
+                                                path:'projects', 
+                                                options:{sort:{'createdAt':'desc'}},
+                                                populate:[{
+                                                    path:'sessions', 
+                                                    options:{sort:{'createdAt':'desc'}},
+                                                    populate:{path:'teamMembers'}
+                                                  },
+                                                  {
+                                                    path:'coordinator'
+                                                }]
+                                              });
         
         return customer;
       }

@@ -1,5 +1,6 @@
 import { ModelOptions, mongoose, prop, Ref} from '@typegoose/typegoose';
 import Module from './module';
+import Operator from './operator';
 
 enum Typology {
 
@@ -33,7 +34,7 @@ export class Subscrib {
     @prop({type: () => String, required: true, default: []})
     public roles! : string[]; 
 
-    @prop({ref: () =>  Module, type:() => mongoose.Types.ObjectId})
+    @prop({ref: () =>  Module, type:() => String})
     public features! : Ref<Module>
 
     @prop({type: () => Number, required: true, default: 0})
@@ -45,9 +46,8 @@ export class Subscrib {
     // @prop({type: () => Date, required: true}) // mongoose will generate the date of creation
     // public creationDate!: Date;
 
-    // @prop({ref: () =>  Operator}) // OperatorId is a reference to Operator in that way we can get the operator name
-    @prop({type: () => String})
-    public creator!: string;
+    @prop({ref: () =>  Operator, type: () => String}) // OperatorId is a reference to Operator in that way we can get the operator name
+    public creator!: Ref<Operator>;
 
 }
 

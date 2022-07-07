@@ -4,9 +4,6 @@ import { prop, ModelOptions } from "@typegoose/typegoose";
 @ModelOptions({ schemaOptions: { timestamps: true } })
 export class Treatment {
 
-    // @prop({type: () => mongoose.Types.ObjectId})
-    // public _id!: string;
-
     @prop({ type: () => String, required: true, unique: true })
     public treatmentName!: string;
 

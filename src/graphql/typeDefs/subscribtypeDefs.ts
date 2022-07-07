@@ -11,7 +11,7 @@ type Subscrib{
     features:Module
     monthlyPrice:Float
     termPeriod:String
-    creator:String
+    creator:Operator
 }
 
 input SubscribInput {

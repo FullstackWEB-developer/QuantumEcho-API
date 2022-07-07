@@ -1,4 +1,8 @@
 import { prop, Ref, ModelOptions} from '@typegoose/typegoose';
+<<<<<<< HEAD
+import mongoose from 'mongoose';
+=======
+>>>>>>> 7ded9c16b129ff179921d7c8d94d757b0ec21a31
 import { Operator } from './operator';
 import { Treatment } from './treatment';
 
@@ -41,8 +45,8 @@ export class Session {
     @prop({type: () => String})
     public sessionInfo?: string;
 
-    @prop({ref : () => Operator, type:() => [String]})
-    public teamMembers!: Ref<Operator>[];
+    @prop({ref: () => Operator, default:[]})
+    public teamMembers?: Ref<Operator>[];
 
     @prop({type: () => Interview})
     public interview?: Interview;

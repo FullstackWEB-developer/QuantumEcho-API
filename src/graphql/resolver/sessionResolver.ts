@@ -1,7 +1,9 @@
-import {SessionModel} from "../../models/dbmodel";
+import { SessionModel, OperatorModel } from '../../models/dbmodel';
 const global = require('../../global');
 import path from 'path';
 import fs from 'fs';
+import { model } from "mongoose";
+import Operator from '../../models/operator';
 
 const sessionResolver = {
     Query: {
@@ -13,7 +15,7 @@ const sessionResolver = {
 
       async sessions (_parent: any, _args: any, { headers }: any) {
         await global.isAuthorization(headers);
-        const lists = await SessionModel.find();
+        const lists = await SessionModel.find().populate('teamMembers');
 
         var pageNum:number = 0;
         if (_args.pageNum && _args.pageNum > 0) {
@@ -25,7 +27,7 @@ const sessionResolver = {
 
       async session (_parent: any, _args: any, { headers }: any) {
         await global.isAuthorization(headers);
-        const result = await SessionModel.findOne({_id: _args._id});
+        const result = await SessionModel.findOne({_id: _args._id}).populate('teamMembers');
         return result;
       }
     },

@@ -23,7 +23,7 @@ type ProtocolResult{
 
 type Query {
     protocolCount : Int!
-    protocols(protocolName:String, pageNum:Int):ProtocolResult
+    protocols(condition:ProtocolInput, pageNum:Int):ProtocolResult
     protocol(_id: ID!): Protocol
   }
   
