@@ -1,8 +1,4 @@
 import { prop, Ref, ModelOptions} from '@typegoose/typegoose';
-<<<<<<< HEAD
-import mongoose from 'mongoose';
-=======
->>>>>>> 7ded9c16b129ff179921d7c8d94d757b0ec21a31
 import { Operator } from './operator';
 import { Treatment } from './treatment';
 
