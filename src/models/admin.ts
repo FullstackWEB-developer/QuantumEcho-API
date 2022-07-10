@@ -2,8 +2,6 @@ import { prop, Ref, ModelOptions} from '@typegoose/typegoose';
 import mongoose, { Schema, SchemaTypes } from 'mongoose';
 import { Subscrib } from './subscrib';
 
-
-
 class Address {
 
     @prop({type: () => String})
@@ -32,11 +30,12 @@ enum SubRoles {
 
 @ModelOptions({ schemaOptions: { timestamps: true } })
 export class Admin {
-
     // NEED TO WORK ON THIS
+    @prop({type:() => String}) 
+    public adminId!: string; //is taken from AWS cognito 
 
-    // @prop({type:() => mongoose.Types.ObjectId}) 
-    // public adminId!: string; is taken from AWS cognito 
+    @prop({type: () => String, required: true})
+    public profileImage!: string;
 
     @prop({type: () => String, required: true, unique: true})  
     public phoneNumber!: string;

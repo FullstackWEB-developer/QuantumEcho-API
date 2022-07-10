@@ -1,7 +1,10 @@
 const typeDefs =`
+
 type Admin {
     _id:ID
+    adminId:String
     phoneNumber:String
+    profileImage:String
     address:Address
     firstName:String
     lastName:String
@@ -11,7 +14,10 @@ type Admin {
 }
 
 input AdminInput {
+    _id:String
+    adminId:String
     phoneNumber:String
+    profileImage:String
     address:AddressInput
     firstName:String
     lastName:String
@@ -23,12 +29,13 @@ input AdminInput {
 type Query {
     adminCount : Int!
     admins:[Admin]
-    admin(_id: ID!): Admin
+    adminById(_id: ID!): Admin
+    adminByCognitoId(cognitoId: String!): Admin
 }
 
 type Mutation {
 
-    postAdmin(input: AdminInput): Message
+    postAdmin(input: AdminInput): Admin
     
     updateAdmin(
         _id:ID!

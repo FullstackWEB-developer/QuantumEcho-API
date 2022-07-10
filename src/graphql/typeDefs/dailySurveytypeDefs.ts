@@ -1,47 +1,58 @@
-
 const typeDefs = `
 type DailySurvey {
     _id:ID
     dateOfSurvey:String
     questions:Questions
+    surveyTime:String
+    surveyType:String
 }
+
 input DailySurveyInput {
+    _id:String
     dateOfSurvey:String
     questions:QuestionsInput
+    surveyTime:String
+    surveyType:SurveyType
 }
-enum QuestionOption {
-    q_1
-    q_2
-    q_3
-    q_4
-    q_5
-    q_6  
-    q_7
-    q_8
-    q_9
-    q_10
-}
+
 type Questions {
-    question1:QuestionOption
-    question2:QuestionOption
-    question3:QuestionOption
+    question1:Int
+    question2:Int
+    question3:Int
 }
 
 input QuestionsInput {
-    question1:QuestionOption
-    question2:QuestionOption
-    question3:QuestionOption
+    question1:Int
+    question2:Int
+    question3:Int
+}
+
+enum SurveyType {
+    Morning
+    Evening
+}
+
+type DailySurveyFixData{
+    dateOfSurvey:String
+    morningData:DailySurvey
+    eveningData:DailySurvey
+}
+
+type DailySurveyResult{
+    lists:[DailySurveyFixData]
+    totalCount:Int
+    perCount:Int
 }
 
 type Query {
-    daliySurveyCount : Int!
-    daliySurveys:[DailySurvey]
-    daliySurvey(_id: ID!): DailySurvey
+    dailySurveyCount : Int!
+    dailySurveys(customerId: String, dateOfSurvey: String, surveyType: String, pageNum:Int):DailySurveyResult
+    dailySurvey(condition: DailySurveyInput): DailySurvey
 }
 
 type Mutation {
 
-    postDailySurvey(input: DailySurveyInput): Message
+    postDailySurvey(input: DailySurveyInput, customerId:String!): Message
     
     updateDailySurvey(
         _id:ID!
@@ -51,6 +62,8 @@ type Mutation {
     deleteDailySurvey(_id:ID!):Message!
 
 }
-`
+` 
+
+
 
 export default typeDefs;

@@ -1,7 +1,6 @@
 import express from "express";
 import mongoose from "mongoose";
 import { graphqlHTTP } from "express-graphql";
-// import graphqlHeader from 'express-graphql-header';
 import cors from 'cors';
 import bodyParser from 'body-parser';
 import dotenv from 'dotenv';
@@ -10,7 +9,6 @@ import typeDefs from "./src/graphql/typeDefs";
 import resolvers from "./src/graphql/resolvers";
 
 const graphqlTools = require('graphql-tools');
-// const graphqlHeader = require('express-graphql-header');
 
 const app = express();
 

@@ -18,6 +18,7 @@ type Operator{
   store:[Subscrib]
   customers:[Customer]
   protocols:[Protocol]
+  createdAt:String
 }
 
 input OperatorInput{

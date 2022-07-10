@@ -1,16 +1,16 @@
 import { ModelOptions, mongoose, prop, Ref} from '@typegoose/typegoose';
 import Module from './module';
-import Operator from './operator';
+import Admin from './admin';
 
 enum Typology {
 
-    PUBLIC = 'public',
-    CUSTOM = 'custom'
+    PUBLIC = 'Public',
+    CUSTOM = 'Custom'
 }
 
 enum Status {
-    PUBLISHED = 'published',
-    UNPUBLISHED = 'unpublished'
+    PUBLISHED = 'Published',
+    UNPUBLISHED = 'Unpublished'
 }
 
 @ModelOptions({ schemaOptions: { timestamps: true } })
@@ -25,17 +25,17 @@ export class Subscrib {
     @prop({type: () => String, required: true})
     public description!: string;
 
-    @prop({type: () => String, required: true, enum: Object.values(Typology)})
+    @prop({type: () => String, required: true})
     public typology!: string;
 
-    @prop({type: () => String, required: true, enum: Object.values(Status)})
+    @prop({type: () => String, required: true})
     public status!: string;
 
     @prop({type: () => String, required: true, default: []})
     public roles! : string[]; 
 
-    @prop({ref: () =>  Module, type:() => String})
-    public features! : Ref<Module>
+    @prop({ref: () =>  Module})
+    public features! : Ref<Module>;
 
     @prop({type: () => Number, required: true, default: 0})
     public monthlyPrice!: number;
@@ -46,8 +46,8 @@ export class Subscrib {
     // @prop({type: () => Date, required: true}) // mongoose will generate the date of creation
     // public creationDate!: Date;
 
-    @prop({ref: () =>  Operator, type: () => String}) // OperatorId is a reference to Operator in that way we can get the operator name
-    public creator!: Ref<Operator>;
+    @prop({ref: () =>  Admin, type: () => String}) // OperatorId is a reference to Operator in that way we can get the operator name
+    public creator!: Ref<Admin>;
 
 }
 

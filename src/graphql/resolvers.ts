@@ -12,6 +12,7 @@ import sessionResolver from './resolver/sessionResolver';
 import treatmentResolver from './resolver/treatmentResolver';
 import transactionResolver from './resolver/transactionResolver';
 import uploadResolver from './resolver/uploadResolver';
+import moduleResolver from './resolver/moduleResolver';
 
 const resolvers = deepmerge.all([
     operatorResolver,
@@ -26,6 +27,7 @@ const resolvers = deepmerge.all([
     treatmentResolver,
     transactionResolver,
     uploadResolver,
+    moduleResolver,
 ]);
 
 export default resolvers;

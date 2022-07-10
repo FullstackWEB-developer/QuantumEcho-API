@@ -14,6 +14,11 @@ class Questions {
 
 }
 
+enum SurveyType {
+    Morning = 'Morning',
+    Evening = 'Evening'
+}
+
 @ModelOptions({ schemaOptions: { timestamps: true } })
 export class DailySurvey {
 
@@ -26,9 +31,14 @@ export class DailySurvey {
     @prop({type: () => Questions, required: true})
     public questions!: Questions;
 
+    //***** add by Sheng Ben *****//
+    @prop({type: () => String})
+    public surveyTime!: string;
+
+    @prop({type:() => String, default: SurveyType.Morning})
+    public surveyType!: string;
+    //***** add by Sheng Ben *****//
+
 }
-
-
-// const DailySurveyModel = getModelForClass(DailySurvey);
 
 export default DailySurvey;

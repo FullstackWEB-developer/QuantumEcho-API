@@ -16,6 +16,7 @@ type Customer{
     lastAccess:String
     dailySurveys:[DailySurvey]
     projects:[Project]
+    createdAt:String
 }
 
 input CustomerInput{

@@ -1,4 +1,5 @@
 
+
 const typeDefs = `
 
 type User {
@@ -9,6 +10,9 @@ type User {
     role:[String]!
     accessToken:String
     status:String
+    lastAccess:String
+    customer:[Customer]
+    operator:[Operator]
 }
 
 input UserInput{
@@ -20,9 +24,22 @@ input UserInput{
     status:String
 }
 
+type UserResult{
+    lists:[User]
+    totalCount:Int
+    perCount:Int
+  }
+
+input UserSearchInput {
+    role:[String]
+    userName:String
+    status:String
+    lastAccess:String
+}
+
 type Query {
     userCount : Int!
-    users:[User]
+    users(cognitoId:String, condition:UserSearchInput, pageNum:Int):UserResult
     user(email: String!): User
 }
 
@@ -35,10 +52,17 @@ type Mutation {
         input:UserInput
     ):Operator
 
+    updateUserData(_id:String!, input:UserInput):Message
+
     updateUserWithCustomer(
         email:String!
         input:UserInput
     ):Customer
+
+    upateUserWithAdmin(
+        email:String!
+        input:UserInput
+    ):Admin
   
     deleteUser(email:String!):Message!
 

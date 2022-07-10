@@ -3,6 +3,7 @@ import { Customer } from './customer';
 import { Protocol } from './protocol';
 import { Subscrib } from './subscrib';
 
+
 class ContactInfo {
 
     @prop({type: () => String, required: true })

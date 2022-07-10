@@ -39,6 +39,9 @@ export class User {
 
     @prop({type: () => String, required: true, enum: Object.values(Status)})
     public status?: string;    
+
+    @prop({type: () => Date, default:Date.now()})
+    public lastAccess?: Date;
     
 }
 

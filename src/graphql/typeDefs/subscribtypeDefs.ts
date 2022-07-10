@@ -5,13 +5,14 @@ type Subscrib{
     _id:ID
     coverImage:String
     description:String
-    typology:Typology
-    status:Status
+    typology:String
+    status:String
     roles:[String]
     features:Module
     monthlyPrice:Float
     termPeriod:String
-    creator:Operator
+    creator:Admin
+    createdAt:String
 }
 
 input SubscribInput {
@@ -27,12 +28,12 @@ input SubscribInput {
 }
 
 enum Typology {
-    public
-    custom
+    Public
+    Custom
 }  
 enum Status {
-    published
-    unpublished
+    Published
+    Unpublished
 }
 enum Role {
     general_manager

@@ -28,7 +28,8 @@ const customerResolver = {
             {
               path:'coordinator'
           }]
-        });
+        })
+        .populate('dailySurveys');
         
         var pageNum:number = 0;
         if (_args.pageNum && _args.pageNum > 0) {
@@ -54,7 +55,8 @@ const customerResolver = {
                                               {
                                                 path:'coordinator'
                                             }]
-                                          });
+                                          })
+                                          .populate('dailySurveys');
         return result;
       },
 
@@ -72,10 +74,11 @@ const customerResolver = {
                                                   {
                                                     path:'coordinator'
                                                 }]
-                                              });
+                                              })
+                                              .populate('dailySurveys');
         
         return customer;
-      }
+      },
       
     },
     Mutation: {
