@@ -48,7 +48,7 @@ exports.isAuthorization = async function(headers:any, isNameCheck:boolean = true
             console.log("🚀 ~ header authorization ~ user not found");
             throw new Error('🚀 ~ token verification ~ user not found');
         }else{
-            if (result.status !== 'active' && !isNameCheck){
+            if (result.status !== 'active'){
                 throw new Error('user not active');
             }else{
                 await UserModel.findOneAndUpdate({cognitoId: cognitoId}, {lastAccess:new Date()});
