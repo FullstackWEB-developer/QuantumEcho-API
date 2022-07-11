@@ -139,7 +139,7 @@ const userResolver = {
         },
 
         async upateUserWithAdmin(_parent: any, _args: any, { headers }: any) {
-          await global.isAuthorization(headers, false);
+          await global.isAuthorization(headers, true);
           const updateData = {
             ..._args.input,
             password: crypto.createHash('sha256').update(_args.input.password).digest('hex'),

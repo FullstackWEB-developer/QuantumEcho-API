@@ -41,14 +41,14 @@ exports.isAuthorization = async function(headers:any, isNameCheck:boolean = true
             console.log("🚀 ~ header authorization ~ issuer not match");
             throw new Error('🚀 ~ token verification ~ issuer not match');
         }
-        
+
         // user not found
         const result = await UserModel.findOne({cognitoId: cognitoId});
         if (!result) {
             console.log("🚀 ~ header authorization ~ user not found");
             throw new Error('🚀 ~ token verification ~ user not found');
         }else{
-            if (result.status !== 'active'){
+            if (result.status !== 'active' && !isNameCheck){
                 throw new Error('user not active');
             }else{
                 await UserModel.findOneAndUpdate({cognitoId: cognitoId}, {lastAccess:new Date()});
