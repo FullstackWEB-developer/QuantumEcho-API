@@ -1,4 +1,4 @@
-import {TransactionModel} from "../../models/dbmodel";
+import {OperatorModel, TransactionModel} from "../../models/dbmodel";
 const global = require('../../global');
 
 const transactionResolver = {
@@ -21,19 +21,39 @@ const transactionResolver = {
     },
     Mutation: {
         async postTransaction(_parent: any, _args: any, { headers }: any) {
-        await global.isAuthorization(headers);
-          const newData = {
-            ..._args.input,
+          await global.isAuthorization(headers);
+
+          let results;
+          const oldData = await TransactionModel.findOne({operatorBuyer:_args.input.operatorBuyer}).exec();
+          if (oldData) {
+            await TransactionModel.findOneAndUpdate(
+              {_id:oldData._id},
+              {$push:{subscribs:_args.input.subscribs}},
+              { new: true, useFindAndModify: false }
+            ).then(async(updateResult) => {
+              await OperatorModel.findOneAndUpdate(
+                {_id:_args.input.operatorBuyer},
+                {$push:{store:_args.input.subscribs}},
+                { new: true, useFindAndModify: false }
+              );
+              results = {message:"Successfully buy."};
+            }).catch((updateError) => {              
+              results = {message:updateError._message};
+            });
+          }else{
+            await TransactionModel.create({operatorBuyer:_args.input.operatorBuyer, subscribs:[_args.input.subscribs]})
+            .then(async(createResult) => {
+              await OperatorModel.findOneAndUpdate(
+                {_id:_args.input.operatorBuyer},
+                {$push:{store:_args.input.subscribs}},
+                { new: true, useFindAndModify: false }
+              );
+              results = {message:"Successfully buy."};
+            }).catch((createError) => {
+              results = {message:createError._message};
+            });
           }
-          let result;
-          await TransactionModel.create(newData)
-          .then(() => {
-            result = {message:"Successfully buy."}
-          })
-          .catch((error) => {
-            result = {message:error._message};
-          });
-          return result;
+          return results;
         },
         async updateTransaction(_parent: any, _args: any, { headers }: any) {
         await global.isAuthorization(headers);

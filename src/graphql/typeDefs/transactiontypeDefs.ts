@@ -7,7 +7,7 @@ type Transaction{
 }
 
 input TransactionInput{
-    subscribs:[String]
+    subscribs:String
     operatorBuyer:String
 }
 

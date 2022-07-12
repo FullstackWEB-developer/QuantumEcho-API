@@ -85,6 +85,7 @@ type Query {
   operatorCount : Int!
   operators:[Operator]
   operator(operatorId: String!): Operator
+  operatorById(_id: String!): Operator
 
   operatorAggregates(_id:String!, condition:AggregateInput):AggregateType
 }

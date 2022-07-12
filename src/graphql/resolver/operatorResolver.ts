@@ -21,6 +21,17 @@ const operatorResolver = {
         const result = await OperatorModel.findOne({operatorId: _args.operatorId}).populate('customers');
         return result;
       },
+      async operatorById (_parent: any, _args: any, { headers }: any) {
+        await global.isAuthorization(headers);
+        const result = await OperatorModel.findById(_args._id)
+        .populate({
+          path:'store',
+          populate:{
+            path:'features'
+          }
+        });
+        return result;
+      },
 
       async operatorAggregates(_parent: any, _args: any, { headers }: any) {
         await global.isAuthorization(headers);
@@ -170,6 +181,7 @@ const operatorResolver = {
           const updateData = {
             ..._args.input,
           }
+          
           let newOperator
           if (updateData.profileImage){
             let _path = path.join(path.resolve(), updateData.profileImage)
@@ -200,11 +212,12 @@ const operatorResolver = {
               ...updateData,
             }
           }
+          
           if (await OperatorModel.findOne({operatorId: _args.operatorId})) {
             let results;
             await OperatorModel.findOneAndUpdate({operatorId:_args.operatorId}, newOperator, {new: true})
             .then((result:any) => {
-                results = result;
+              results = result;
             }).catch((error:any) => {
               results = null;
             });
@@ -213,9 +226,11 @@ const operatorResolver = {
             let results;
             await OperatorModel.create(newOperator)
             .then((result:any) => {
+              console.log("🚀 ~ file: operatorResolver.ts ~ line 218 ~ .then ~ result", result)
               results = result
             })
             .catch((error:any) => {
+              console.log("🚀 ~ file: operatorResolver.ts ~ line 222 ~ updateOperator ~ error", error)
               results = null;
             });
             return results;
