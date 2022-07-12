@@ -49,11 +49,30 @@ type CustomerResultMessage {
     profilePath:String
 }
 
+type CustomerOperatorsResult{
+    lists: [CustomerOperator]
+    totalCount: Int
+    perCount: Int
+}
+
+type CustomerOperator {
+    _id:String
+    operator: Operator
+    treatmentName: String
+    from: String
+    to: String
+    actual: String
+    delay: String
+    duration: String
+    progress: Int
+}
+
 type Query {
     customerCount : Int!
     customers(condition:CustomerInput, pageNum:Int):CustomersResult
     customer(customerId: String!): Customer
     customerById(_id: ID!): Customer
+    customerOperators(_id:String!, pageNum:Int):CustomerOperatorsResult
 }
 
 type Mutation {

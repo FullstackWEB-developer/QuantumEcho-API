@@ -20,7 +20,133 @@ const operatorResolver = {
         await global.isAuthorization(headers);
         const result = await OperatorModel.findOne({operatorId: _args.operatorId}).populate('customers');
         return result;
+      },
+
+      async operatorAggregates(_parent: any, _args: any, { headers }: any) {
+        await global.isAuthorization(headers);
+
+        // admin's general tab aggregates
+        const general_aggregate = {
+          user_from:'01/02/2019',
+          subscriptions:5,
+          current_credits:500,
+          earned_credits:200,
+        }
+
+        // overview aggregate
+        const subscriptions_aggregate = {
+          online_clients:12,
+          active_treatments:123,
+          saved_sessions:1200,
+          defined_protocols:1000,
+        }
+
+        // clients trend chart value
+        const trend_aggregate = {
+          series: [
+            {
+              name: '',
+              data: [30, 35, 40, 50, 60, 70, 70, 80, 83, 86, 90, 100],
+            },
+          ],
+          colors: ['#89DBF5'],
+          categories:[],
+        }
+
+        const age_aggregate = {
+          colors: ['#AE95FF', '#DDE2FF', '#F2F2F2', '#93949C'],
+          labels: ['+ 60 years', '45 - 60 years', '30 - 45 years', '- 30 years'],
+          values:[10, 30, 35, 25],
+        }
+
+        const sex_aggregate = {
+          colors: ['#AE95FF', '#DDE2FF', '#93949C'],
+          labels: ['Female', 'Male', 'Other'],
+          values:[45, 30, 25],
+        }
+
+        const kingdom_aggregate = {
+          colors: ['#AE95FF', '#DDE2FF', '#93949C'],
+          labels: ['Animals', 'Vegetables', 'Other'],
+          values:[50, 35, 15],
+        }
+
+        const weekly_aggregate = {
+          series: [
+            {
+              name: 'Last Week',
+              data: [44, 55, 57, 56, 61, 58, 79],
+            },
+            {
+              name: 'This Week',
+              data: [76, 85, 101, 98, 87, 105, 91],
+            },
+          ],
+          colors: ['#7B85A8', '#89DBF5'],
+          categories: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+        }
+
+        // Current users’ performance chart value
+        const current_users_aggregate = {
+          colors: ['#89dbf5'],
+          labels: [],
+          values:[40, 60], // first(40): Online, seconde(60): Active
+        }
+
+        //Current clients’ performance chart value
+        const current_clients_aggregate = {
+          colors: ['#8DEFA9', '#E7E26E', '#FF8B36', '#F97070'],
+          labels: ['completed +75%', 'completed 50-75%', 'completed 30-50%', 'completed -30%'],
+          values:[10, 30, 35, 25],
+        }
+
+        // Trend of treatments’ quality chart value
+        const treatment_aggregate = {
+          series: [
+            {
+              name: 'Positive answersPositive answers (from 6/10)',
+              data: [31, 40, 28, 51, 42, 109, 100, 80],
+            },
+            {
+              name: 'Negative answers (less than 6/10)',
+              data: [11, 32, 45, 32, 34, 52, 41, 70],
+            },
+          ],
+          colors: ['#8DEFA9', '#F97070'],
+          categories: ['January', 'Febbruary', 'March', 'April', 'May', 'June', 'June', 'July']
+        }
+
+        const income_trend_aggregate = {
+          series: [
+            {
+              name: '2021',
+              data: [31, 40, 28, 51, 42, 109, 100, 80],
+            },
+            {
+              name: '2022',
+              data: [11, 32, 45, 32, 34, 52, 41, 70],
+            },
+          ],
+          colors: ['#89DBF5', '#5c637f'],
+          categories: ['January', 'Febbruary', 'March', 'April', 'May', 'June', 'June', 'July']
+        }
+
+        return {
+          general_aggregate,
+          subscriptions_aggregate,
+          trend_aggregate,
+          age_aggregate,
+          sex_aggregate,
+          kingdom_aggregate,
+          weekly_aggregate,
+          current_users_aggregate,
+          current_clients_aggregate,
+          treatment_aggregate,
+          income_trend_aggregate,
+        }
+
       }
+
     },
     Mutation: {
         async postOperator(_parent: any, _args: any, { headers }: any) {

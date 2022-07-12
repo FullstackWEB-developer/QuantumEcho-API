@@ -79,6 +79,39 @@ const customerResolver = {
         
         return customer;
       },
+
+      async customerOperators(_parent: any, _args: any, { headers }: any) {
+        await global.isAuthorization(headers);
+
+        const results:any[] = [];
+        for (let i = 0; i < 20; i++){
+          let item = {
+            _id:"62c433ea971bf67f1deb2e88",
+            operator:{
+              _id:"62c433ea971bf67f1deb2e4c",
+              firstName:"Name",
+              lastName:`Surname ${i}`,
+              profileImage:'assets/images/avatars/brian-hughes.jpg',
+            },
+            treatmentName:`Treatment ${i}`,
+            from: `00/00/200${i}`,
+            to: `00/00/200${i}`,
+            actual: `00/00/200${i}`,
+            delay: `00/00/200${i}`,
+            duration: `00/00/200${i}`,
+            progress: 70+i,
+          }
+          results.push(item);
+        }
+
+        var pageNum:number = 0;
+        if (_args.pageNum && _args.pageNum > 0) {
+            pageNum = _args.pageNum - 1;
+            return {lists:results.slice(pageNum*Number(process.env.PAGE_PER_COUNT), (pageNum+1) * Number(process.env.PAGE_PER_COUNT)), totalCount:results.length, perCount:Number(process.env.PAGE_PER_COUNT)};
+        }else{
+          return {lists:results, totalCount:results.length, perCount:Number(process.env.PAGE_PER_COUNT)};
+        }
+      }
       
     },
     Mutation: {

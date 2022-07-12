@@ -39,10 +39,11 @@ type AdminGeneralDashboard {
 }
 
 type AdminAccountingDashboard{
-    subscriptions_aggregate:SubscriptionsAggregate
+    subscriptions_aggregate:TotalAggregate
     trend_aggregate:AreaChartType
     payments_status_aggregate:CricleChartType
     payments_methods_aggregate:CricleChartType
+    spending_aggregate:AreaChartType
 }
 
 type UserAggregate {
@@ -52,7 +53,7 @@ type UserAggregate {
     clients:Int
 }
 
-type SubscriptionsAggregate{
+type TotalAggregate{
     subscriptions:Int
     new_subscriptions:Int
     credits:Int
@@ -81,11 +82,11 @@ type Query {
     admins:[Admin]
     adminById(_id: ID!): Admin
     adminByCognitoId(cognitoId: String!): Admin
-    adminGneralDashboard(trendDate:String, userType:UserTypeInput, treatmentsDate:String):AdminGeneralDashboard
+    adminGneralDashboard(trendDate:String, userType:WeeklyInput, treatmentsDate:String):AdminGeneralDashboard
     adminAccountingDashboard(trendDate:String):AdminAccountingDashboard
 }
 
-input UserTypeInput{
+input WeeklyInput{
     userType:String
     dateFrom:String
     dateTo:String

@@ -167,11 +167,27 @@ const adminResolver = {
           values:[30, 70],
         }
 
+        const spending_aggregate = {
+          series: [
+            {
+              name: 'Operators',
+              data: [31, 40, 28, 51, 42, 109, 100, 80],
+            },
+            {
+              name: 'Clients',
+              data: [11, 32, 45, 32, 34, 52, 41, 70],
+            },
+          ],
+          colors: ['#89DBF5', '#7B85A8'],
+          categories: ['January', 'Febbruary', 'March', 'April', 'May', 'June', 'June', 'July']
+        }
+
         return {
           subscriptions_aggregate,
           trend_aggregate,
           payments_status_aggregate,
           payments_methods_aggregate,
+          spending_aggregate,
         }
 
       },

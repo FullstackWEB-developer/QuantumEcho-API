@@ -37,7 +37,7 @@ export class User {
     @prop ({type: () => String})
     public accessToken?: string;
 
-    @prop({type: () => String, required: true, enum: Object.values(Status)})
+    @prop({type: () => String, enum: Object.values(Status)})
     public status?: string;    
 
     @prop({type: () => Date, default:Date.now()})
