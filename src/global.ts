@@ -81,3 +81,59 @@ exports.generateRandomString = async function (myLength:number) {
   return randomString;
 }
 
+exports.getModuleOfSession = async function (){
+    const mockData = [
+        {
+            moduleName: 'BICOM',
+            moduleValue: 2,
+            resonancevalue: 98,
+            description: '1.Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.',
+            picture: 'assets/images/avatars/male-01.jpg',
+        },
+        {
+            moduleName: 'Color Therapy',
+            moduleValue: 5,
+            resonancevalue: 67,
+            description: '2.Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.',
+            picture: 'assets/images/avatars/male-02.jpg',
+        },
+        {
+            moduleName: 'Acupunture',
+            moduleValue: 1,
+            resonancevalue: 54,
+            description: '3.Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.',
+            picture: 'assets/images/avatars/male-03.jpg',
+        },
+        {
+            moduleName: 'Affirmation',
+            moduleValue: 2,
+            resonancevalue: -15,
+            description: '4.Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.',
+            picture: 'assets/images/avatars/male-04.jpg',
+        },
+    ];
+
+    return mockData;
+}
+
+exports.getResonanceData = async function (){
+    const mockData = [
+        {
+            moduleName: 'BICOM',
+            moduleValue: 2,
+            resonancevalue: 98,
+            description: '1.Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.',
+            picture: 'assets/images/avatars/male-01.jpg',
+        },
+        {
+            moduleName: 'Color',
+            moduleValue: 5,
+            resonancevalue: 67,
+            description: '2.Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.',
+            picture: 'assets/images/avatars/male-02.jpg',
+        },
+    ];
+
+    return mockData;
+}
+

@@ -36,10 +36,13 @@ const operatorResolver = {
       async operatorAggregates(_parent: any, _args: any, { headers }: any) {
         await global.isAuthorization(headers);
 
+        const operatorData = await OperatorModel.findOne({_id:_args._id}).populate('store');
+        const subscriptions = operatorData && operatorData.store ? operatorData.store?.length : 0;
+
         // admin's general tab aggregates
         const general_aggregate = {
           user_from:'01/02/2019',
-          subscriptions:5,
+          subscriptions,
           current_credits:500,
           earned_credits:200,
         }

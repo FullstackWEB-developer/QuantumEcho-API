@@ -12,6 +12,9 @@ import subscrib from './subscrib';
 import transaction from './transaction';
 import treatment from './treatment';
 import treatmentSurvey from './treatmentSurvey';
+import moduleSelection from './moduleSelection';
+import resonanceGroup from './resonanceGroup';
+import resonanceSubGroup from './resonanceSubGroup';
 
 export const AdminModel = getModelForClass(admin);
 export const CustomerModel = getModelForClass(customer);
@@ -26,3 +29,7 @@ export const SubscribModel = getModelForClass(subscrib);
 export const TransactionModel = getModelForClass(transaction);
 export const TreatmentModel = getModelForClass(treatment);
 export const TreatmentSurveyModel = getModelForClass(treatmentSurvey);
+
+export const ModuleSelectionModel = getModelForClass(moduleSelection);
+export const ResonanceGroupModel = getModelForClass(resonanceGroup);
+export const ResonanceSubGroupModel = getModelForClass(resonanceSubGroup);
