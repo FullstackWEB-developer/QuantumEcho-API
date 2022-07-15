@@ -54,7 +54,6 @@ const dailysurveyResolver = {
           return {lists:dailySurveys.slice(pageNum*Number(process.env.PAGE_PER_COUNT), (pageNum+1) * Number(process.env.PAGE_PER_COUNT)), totalCount:dailySurveys.length, perCount:Number(process.env.PAGE_PER_COUNT)};
         }
         return {lists:dailySurveys, totalCount:dailySurveys.length, perCount:Number(process.env.PAGE_PER_COUNT)};
-        return dailySurveys;
       },
 
       async dailySurvey (_parent: any, _args: any, { headers }: any) {

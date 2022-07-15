@@ -24,7 +24,7 @@ class ContactInfo {
     @prop({type: () => String})
     public website?: string;
 
-    @prop({type: () => String, required: true, unique: true})
+    @prop({type: () => String, required: true})
     public phoneNumber!: string; 
 }
 
