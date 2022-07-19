@@ -48,8 +48,8 @@ export class Customer {
     @prop({type: () => String, required: true})
     public placeOfBirth!: string;
 
-    @prop({type: () => String, required: true})
-    public dateOfBirth!: string;
+    @prop({type: () => Date, required: true})
+    public dateOfBirth!: Date;
 
     @prop({type: () => ContactInfo})
     public contactInfo?: ContactInfo;

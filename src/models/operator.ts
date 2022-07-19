@@ -4,6 +4,12 @@ import { Protocol } from './protocol';
 import { Subscrib } from './subscrib';
 
 
+enum Role {
+    GENERAL_MANAGER = 'general_manager',
+    PROJECT_MANAGER = 'project_manager',
+    WELLNESS_OPERATOR = 'wellness_operator'
+}
+
 class ContactInfo {
 
     @prop({type: () => String, required: true })
@@ -44,8 +50,8 @@ export class Operator {
     @prop({type: () => String, required: true})
     public placeOfBirth!: string; // City of Birth, Country (Rome, Italy)
 
-    @prop({type: () => String, required: true})
-    public dateOfBirth!: string; // DD/MM/YYYY
+    @prop({type: () => Date, required: true})
+    public dateOfBirth!: Date; // DD/MM/YYYY
 
     @prop({type: () => ContactInfo, required: true})
     public contactInfo!: ContactInfo; 

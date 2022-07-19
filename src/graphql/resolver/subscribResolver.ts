@@ -136,7 +136,9 @@ const subscribResolver = {
           let subscribeData = await SubscribModel.findOne({_id:_args._id});
           if (subscribeData && subscribeData.coverImage){
             var coverImagePath = path.join(path.resolve(), subscribeData.coverImage);
-            fs.unlinkSync(coverImagePath);
+            try{              
+              fs.unlinkSync(coverImagePath);
+            }catch{}
           }
           let results;
           await SubscribModel.findOneAndDelete({_id:_args._id})
