@@ -12,7 +12,9 @@ const uploadResolver = {
   },
   Mutation: {
       async singleUpload(_parent: any, _args: any, { headers }: any) {
-        await global.isAuthorization(headers);      
+        if (_args.authCheck){
+          await global.isAuthorization(headers);
+        }      
         const filename = _args.filename
         const id = await global.generateRandomString(8);
         const imgPath = `${process.env.UPLOAD_TEMP_DIR}${id}`

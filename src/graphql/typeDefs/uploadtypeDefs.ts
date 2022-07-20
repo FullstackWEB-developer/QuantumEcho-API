@@ -10,7 +10,7 @@ const typeDefs = `
   }
 
   type Mutation {
-    singleUpload(base64Str: String!, id:String!, filename:String!, type:String!): File!    
+    singleUpload(base64Str: String!, id:String!, filename:String!, type:String!, authCheck: Boolean): File!    
   
     deleteFile(imgPath:String!):Message!
   }

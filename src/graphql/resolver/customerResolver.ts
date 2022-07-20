@@ -163,7 +163,11 @@ const customerResolver = {
         },
 
         async updateCustomer(_parent: any, _args: any, { headers }: any) {
-          await global.isAuthorization(headers);
+          
+          if (_args.authCheck){
+            await global.isAuthorization(headers);
+          }   
+        
           const updateData = {
             ..._args.input,
           }          

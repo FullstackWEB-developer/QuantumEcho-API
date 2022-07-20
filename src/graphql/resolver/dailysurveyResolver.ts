@@ -67,7 +67,6 @@ const dailysurveyResolver = {
 
         async postDailySurvey(_parent: any, _args: any, { headers }: any) {
           await global.isAuthorization(headers);
-          console.log(_args);
 
           const dateOfSurvey = format(new Date(), 'MM/dd/yyyy');
           const surveyTime = format(new Date(), 'hh:mm');

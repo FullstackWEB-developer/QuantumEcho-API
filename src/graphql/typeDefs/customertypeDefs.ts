@@ -82,6 +82,7 @@ type Mutation {
     updateCustomer(
       customerId:String!
       input:CustomerInput
+      authCheck: Boolean
     ):Customer
 
     updateCustomerById(
