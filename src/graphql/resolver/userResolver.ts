@@ -84,7 +84,9 @@ const userResolver = {
         },
 
         async updateUser(_parent: any, _args: any, { headers }: any) {
-          await global.isAuthorization(headers, false);
+          if (!_args.authCheck){
+            await global.isAuthorization(headers, false);
+          }
           const updateData = {
             ..._args.input,
             password: crypto.createHash('sha256').update(_args.input.password).digest('hex'),

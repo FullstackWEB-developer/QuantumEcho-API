@@ -50,6 +50,7 @@ type Mutation {
     updateUser(
         email:String!
         input:UserInput
+        authCheck:Boolean
     ):Operator
 
     updateUserData(_id:String!, input:UserInput):Message
