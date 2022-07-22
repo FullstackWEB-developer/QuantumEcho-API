@@ -31,8 +31,8 @@ const adminResolver = {
 
         let allUserCount: number = 0;
 
-        const generalManagerCnt = await OperatorModel.countDocuments({activity:'general_manager'});
-        const projectManagerCnt = await OperatorModel.countDocuments({activity:'project_manager'});
+        const generalManagerCnt = await OperatorModel.countDocuments({activity:'General manager'});
+        const projectManagerCnt = await OperatorModel.countDocuments({activity:'Project manager'});
         const operatorCnt = await OperatorModel.countDocuments(_args);
         const clientCnt = await CustomerModel.countDocuments(_args);
         const user_aggregate = {general_managers:generalManagerCnt, project_managers: projectManagerCnt, operators: operatorCnt, clients:clientCnt}

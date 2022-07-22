@@ -94,6 +94,9 @@ const userResolver = {
             await DBModel.findOneAndUpdate({cognitoId:updateData.cognitoId}, updateData, {new: true})
             .then(async (result) => {
               results = await OperatorModel.findOne({operatorId:updateData.cognitoId});
+              if (results) {
+                await OperatorModel.findOneAndUpdate({_id: results._id}, {lastAccess: new Date()}, {new: true});
+              }
             }).catch((error) => {
               results = error;
             });

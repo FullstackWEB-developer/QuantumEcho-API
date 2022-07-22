@@ -3,6 +3,7 @@ const global = require('../../global');
 
 import fs from 'fs';
 import path from 'path';
+import Customer from "../../models/customer";
 
 const operatorResolver = {
     Query: {
@@ -36,8 +37,23 @@ const operatorResolver = {
       async operatorAggregates(_parent: any, _args: any, { headers }: any) {
         await global.isAuthorization(headers);
 
-        const operatorData = await OperatorModel.findOne({_id:_args._id}).populate('store');
+        const nowDate = new Date().getTime();
+        const onlineLimitStartDate = new Date(Number(nowDate-30*60*1000));
+        const onlineLimitEndDate = new Date(Number(nowDate+30*60*1000));
+
+        const operatorData = await OperatorModel.findOne({_id:_args._id})
+        .populate('store').populate('customers').populate('protocols');
         const subscriptions = operatorData && operatorData.store ? operatorData.store?.length : 0;
+        
+        let online_clients: number = 0;
+        operatorData?.customers?.map(async(customer:any) => {
+          if (customer.lastAccess) {
+            if (customer.lastAccess > onlineLimitStartDate && customer.lastAccess < onlineLimitEndDate) {
+              online_clients ++;
+            }
+          }
+        })
+        
 
         // admin's general tab aggregates
         const general_aggregate = {
@@ -49,7 +65,7 @@ const operatorResolver = {
 
         // overview aggregate
         const subscriptions_aggregate = {
-          online_clients:12,
+          online_clients,
           active_treatments:123,
           saved_sessions:1200,
           defined_protocols:1000,
@@ -229,11 +245,9 @@ const operatorResolver = {
             let results;
             await OperatorModel.create(newOperator)
             .then((result:any) => {
-              console.log("🚀 ~ file: operatorResolver.ts ~ line 218 ~ .then ~ result", result)
               results = result
             })
             .catch((error:any) => {
-              console.log("🚀 ~ file: operatorResolver.ts ~ line 222 ~ updateOperator ~ error", error)
               results = null;
             });
             return results;

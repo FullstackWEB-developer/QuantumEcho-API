@@ -69,14 +69,14 @@ export class Customer {
     @prop({required: true, type: () => String})
     public bioSex!: string;
 
-    @prop({type: () => Date, default:Date.now()})
+    @prop({type: () => Date})
     public lastAccess?: Date;
 
     @prop({ref: () => DailySurvey})
     public  dailySurveys? : Ref<DailySurvey>[];
 
     @prop({ref: () => Project})
-    public  projects? : Ref<Project>[];
+    public  projects? : Ref<Project>[];  
     
 }
 

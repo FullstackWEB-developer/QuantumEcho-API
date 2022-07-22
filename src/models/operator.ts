@@ -71,12 +71,6 @@ export class Operator {
     @prop({type: () => String})
     public company?: string;
 
-    @prop()
-    public kingdom?: string;
-
-    @prop()
-    public species?: string;
-
     @prop({ref: () => Subscrib, default: []})
     public store?: Ref<Subscrib>[];
 
@@ -85,6 +79,9 @@ export class Operator {
 
     @prop({ref: () => Protocol, default: []})
     public protocols?: Ref<Protocol>[];
+
+    @prop({type: () => Date, default:Date.now()})
+    public lastAccess?: Date;
 
 }   
 
