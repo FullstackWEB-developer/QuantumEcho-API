@@ -1,4 +1,4 @@
-import { OperatorModel } from "../../models/dbmodel";
+import { CustomerModel, OperatorModel } from "../../models/dbmodel";
 const global = require('../../global');
 
 import fs from 'fs';
@@ -37,9 +37,10 @@ const operatorResolver = {
       async operatorAggregates(_parent: any, _args: any, { headers }: any) {
         await global.isAuthorization(headers);
 
-        const nowDate = new Date().getTime();
-        const onlineLimitStartDate = new Date(Number(nowDate-30*60*1000));
-        const onlineLimitEndDate = new Date(Number(nowDate+30*60*1000));
+        const nowDate = new Date();
+        const nowDateTime = nowDate.getTime();
+        const onlineLimitStartDate = new Date(Number(nowDateTime-30*60*1000));
+        const onlineLimitEndDate = new Date(Number(nowDateTime+30*60*1000));
 
         const operatorData = await OperatorModel.findOne({_id:_args._id})
         .populate('store').populate('customers').populate('protocols');
@@ -72,33 +73,112 @@ const operatorResolver = {
         }
 
         // clients trend chart value
+        const customerTrends = [];
+        const nowDateYear = nowDate.getFullYear();
+        for(let i = 1; i < 13; i ++){
+          const startDate = new Date(`${nowDateYear}-${i}-01`);
+          const endDate = new Date(`${nowDateYear}-${i}-31`);
+          const customerCnt = await CustomerModel.countDocuments(
+            {createdAt:{$gt:startDate, $lt:endDate}}
+          );
+          customerTrends.push(customerCnt);
+        }
         const trend_aggregate = {
           series: [
             {
               name: '',
-              data: [30, 35, 40, 50, 60, 70, 70, 80, 83, 86, 90, 100],
+              data: customerTrends,
             },
           ],
           colors: ['#89DBF5'],
-          categories:[],
+          categories:['January', 'Febbruary', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
         }
+
+        const clientCnt = await CustomerModel.countDocuments();
+        const allUserCount: number = Number(clientCnt);
+        const ageAggregateValues: number[] = [];
+        //+ 60 years
+        const more60Date = new Date(nowDate.getFullYear()-60, nowDate.getMonth(), nowDate.getDay());
+        const more60CustomerCnt = await CustomerModel.countDocuments(
+          {dateOfBirth:{$lt:more60Date}}
+        );
+        const more60Cnt: number = Number(more60CustomerCnt);
+        const more60Per: number = allUserCount > 0 ? Math.round((more60Cnt / allUserCount) * 100) : 0;
+        ageAggregateValues.push(more60Per);
+        // 45 - 60 years
+        const less60StartDate = new Date(nowDate.getFullYear()-59, nowDate.getMonth(), nowDate.getDay());
+        const less60EndDate = new Date(nowDate.getFullYear()-45, nowDate.getMonth(), nowDate.getDay());
+        const less60CustomerCnt = await CustomerModel.countDocuments(
+          {dateOfBirth:{$gt:less60StartDate, $lt:less60EndDate}}
+        );
+        const less60Per = allUserCount > 0 ? Math.round(((Number(less60CustomerCnt))/allUserCount)*100) : 0;
+        ageAggregateValues.push(less60Per);
+        // 30 - 45 years
+        const more45StartDate = new Date(nowDate.getFullYear()-44, nowDate.getMonth(), nowDate.getDay());
+        const more45EndDate = new Date(nowDate.getFullYear()-30, nowDate.getMonth(), nowDate.getDay());
+        const more45CustomerCnt = await CustomerModel.countDocuments(
+          {dateOfBirth:{$gt:more45StartDate, $lt:more45EndDate}}
+        );
+        const more45Per = allUserCount > 0 ? Math.round(((Number(more45CustomerCnt))/allUserCount)*100) : 0;
+        ageAggregateValues.push(more45Per);
+        // - 30 years
+        const lessStartDate = new Date(nowDate.getFullYear()-29, nowDate.getMonth(), nowDate.getDay());
+        const less30CustomerCnt = await CustomerModel.countDocuments(
+          {dateOfBirth:{$gt:lessStartDate}}
+        );
+        const less30Per = allUserCount > 0 ? Math.round(((Number(less30CustomerCnt))/allUserCount)*100) : 0;
+        ageAggregateValues.push(less30Per);
 
         const age_aggregate = {
           colors: ['#AE95FF', '#DDE2FF', '#F2F2F2', '#93949C'],
           labels: ['+ 60 years', '45 - 60 years', '30 - 45 years', '- 30 years'],
-          values:[10, 30, 35, 25],
+          values:ageAggregateValues,
         }
 
+        // sex chart value
+        const sexAggregateValues: number[] = [];
+        const femaleCustomerCnt = await CustomerModel.countDocuments(
+          {bioSex:'Female'}
+        );
+        const femalePer = allUserCount > 0 ? Math.round(((Number(femaleCustomerCnt))/allUserCount)*100) : 0;
+        sexAggregateValues.push(femalePer);
+        const maleCustomerCnt = await CustomerModel.countDocuments(
+          {bioSex:'Male'}
+        );
+        const malePer = allUserCount > 0 ? Math.round(((Number(maleCustomerCnt))/allUserCount)*100) : 0;
+        sexAggregateValues.push(malePer);
+        const otherCustomerCnt = await CustomerModel.countDocuments(
+          {bioSex:'Other'}
+        );
+        const otherPer = allUserCount > 0 ? Math.round(((Number(otherCustomerCnt))/allUserCount)*100) : 0;
+        sexAggregateValues.push(otherPer);
         const sex_aggregate = {
           colors: ['#AE95FF', '#DDE2FF', '#93949C'],
           labels: ['Female', 'Male', 'Other'],
-          values:[45, 30, 25],
+          values:sexAggregateValues,
         }
 
+        // kingdom chart value
+        const kingdomAggregateValues: number[] = [];
+        const animalsCustomerCnt = await CustomerModel.countDocuments(
+          {kingdom:'Animals'}
+        );
+        const animalsPer = allUserCount > 0 ? Math.round(((Number(animalsCustomerCnt))/allUserCount)*100) : 0;
+        kingdomAggregateValues.push(animalsPer);
+        const vegetablesCustomerCnt = await CustomerModel.countDocuments(
+          {kingdom:'Vegetables'}
+        );
+        const vegetablesPer = allUserCount > 0 ? Math.round(((Number(vegetablesCustomerCnt))/allUserCount)*100) : 0;
+        kingdomAggregateValues.push(vegetablesPer);
+        const othersCustomerCnt = await CustomerModel.countDocuments(
+          {kingdom:'Other'}
+        );
+        const othersPer = allUserCount > 0 ? Math.round(((Number(othersCustomerCnt))/allUserCount)*100) : 0;
+        kingdomAggregateValues.push(othersPer);
         const kingdom_aggregate = {
           colors: ['#AE95FF', '#DDE2FF', '#93949C'],
           labels: ['Animals', 'Vegetables', 'Other'],
-          values:[50, 35, 15],
+          values:kingdomAggregateValues,
         }
 
         const weekly_aggregate = {
