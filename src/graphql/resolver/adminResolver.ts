@@ -157,29 +157,32 @@ const adminResolver = {
 
         // kingdom chart value
         const kingdomAggregateValues: number[] = [];
-        const animalsOperatorCnt = await OperatorModel.countDocuments(
-          {kingdom:'Animals'}
-        );
+        // const animalsOperatorCnt = await OperatorModel.countDocuments(
+        //   {kingdom:'Animals'}
+        // );
         const animalsCustomerCnt = await CustomerModel.countDocuments(
           {kingdom:'Animals'}
         );
-        const animalsPer = allUserCount > 0 ? Math.round(((Number(animalsOperatorCnt)+Number(animalsCustomerCnt))/allUserCount)*100) : 0;
+        // const animalsPer = allUserCount > 0 ? Math.round(((Number(animalsOperatorCnt)+Number(animalsCustomerCnt))/allUserCount)*100) : 0;
+        const animalsPer = allUserCount > 0 ? Math.round(((Number(animalsCustomerCnt))/Number(clientCnt))*100) : 0;
         kingdomAggregateValues.push(animalsPer);
-        const vegetablesOperatorCnt = await OperatorModel.countDocuments(
-          {kingdom:'Vegetables'}
-        );
+        // const vegetablesOperatorCnt = await OperatorModel.countDocuments(
+        //   {kingdom:'Vegetables'}
+        // );
         const vegetablesCustomerCnt = await CustomerModel.countDocuments(
           {kingdom:'Vegetables'}
         );
-        const vegetablesPer = allUserCount > 0 ? Math.round(((Number(vegetablesOperatorCnt)+Number(vegetablesCustomerCnt))/allUserCount)*100) : 0;
+        // const vegetablesPer = allUserCount > 0 ? Math.round(((Number(vegetablesOperatorCnt)+Number(vegetablesCustomerCnt))/allUserCount)*100) : 0;
+        const vegetablesPer = allUserCount > 0 ? Math.round(((Number(vegetablesCustomerCnt))/Number(clientCnt))*100) : 0;
         kingdomAggregateValues.push(vegetablesPer);
-        const othersOperatorCnt = await OperatorModel.countDocuments(
-          {kingdom:'Other'}
-        );
+        // const othersOperatorCnt = await OperatorModel.countDocuments(
+        //   {kingdom:'Other'}
+        // );
         const othersCustomerCnt = await CustomerModel.countDocuments(
           {kingdom:'Other'}
         );
-        const othersPer = allUserCount > 0 ? Math.round(((Number(othersOperatorCnt)+Number(othersCustomerCnt))/allUserCount)*100) : 0;
+        // const othersPer = allUserCount > 0 ? Math.round(((Number(othersOperatorCnt)+Number(othersCustomerCnt))/allUserCount)*100) : 0;
+        const othersPer = allUserCount > 0 ? Math.round(((Number(othersCustomerCnt))/Number(clientCnt))*100) : 0;
         kingdomAggregateValues.push(othersPer);
         const kingdom_aggregate = {
           colors: ['#89DBF5', '#7B85A8', '#DDE2FF'],
