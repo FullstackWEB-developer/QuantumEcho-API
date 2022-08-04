@@ -9,13 +9,20 @@ export class Transaction {
     // public transactionId!: string;
 
     @prop({ref: () => Subscrib})
-    public subscribs!: Ref<Subscrib>[];
+    // public subscribs!: Ref<Subscrib>[];
+    public subscribs!: Ref<Subscrib>;
 
     // @prop({type: () => Date, default: Date.now})
     // public dateOfTransaction!: Date; // mongoose can create Date of transaction automatically
 
     @prop({ref: () => Operator})
     public operatorBuyer!: Ref<Operator>;
+
+    @prop({type: () => String, required: true})
+    public paymentIntentClientSecret!: string
+
+    @prop({type: () => String, required: true})
+    public paymentIntent!: string
 
 }
 

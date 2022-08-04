@@ -1,5 +1,7 @@
 
 import { CustomerModel, OperatorModel, SessionModel } from '../../models/dbmodel';
+import format from 'date-fns/format';
+import moment from 'moment';
 const global = require('../../global');
 
 import fs from 'fs';
@@ -15,8 +17,83 @@ const customerResolver = {
       },
 
       async customers (_parent: any, _args: any, { headers }: any) {
-        await global.isAuthorization(headers);        
-        const lists = await CustomerModel.find()
+        await global.isAuthorization(headers); 
+
+        const condition = _args.condition ? _args.condition : {};
+        const filters = condition.filters ? condition.filters : {};
+        const idArray: string[] = filters.nameFilters ? filters.nameFilters : [];
+        const lastAccessFilter: string = filters.lastAccessFilter ? filters.lastAccessFilter : 'All';
+        const performanceFilter: string = filters.performanceFilter ? filters.performanceFilter : 'All';
+        const qualityFilter: string = filters.qualityFilter ? filters.qualityFilter : 'All';
+        const sexFilter: string = filters.sexFilter ? filters.sexFilter : 'All';
+        const kingdomFilter: string = filters.kingdomFilter ? filters.kingdomFilter : 'All';
+        const speciesFilter: string = filters.speciesFilter ? filters.speciesFilter : 'All';
+
+        let startDate = `${format(Number(new Date('01/01/1901').getTime()), 'MM/dd/yyyy')} 00:00:00`;
+        let endDate = `${format(Number(new Date('01/01/2300').getTime()), 'MM/dd/yyyy')} 23:59:59`;
+        if ( lastAccessFilter === 'Today') {
+          startDate = `${format(Number(new Date().getTime()), 'MM/dd/yyyy')} 00:00:00`;
+          endDate = `${format(Number(new Date().getTime()), 'MM/dd/yyyy')} 23:59:59`;
+        }else if (lastAccessFilter === 'Yesterday') {
+          startDate = `${format(
+            Number(new Date().getTime() - 3600 * 24 * 1000),
+            'MM/dd/yyyy'
+          )} 00:00:00`;
+          endDate = `${format(Number(new Date().getTime() - 3600 * 24 * 1000), 'MM/dd/yyyy')} 23:59:59`;
+        } else if (lastAccessFilter === 'This Week') {
+          const today = moment();
+          const begginingOfCurrentWeek = today.startOf('week');
+          startDate = `${begginingOfCurrentWeek.format('MM/DD/yyyy')} 00:00:00`;
+          const endOfWeek = today.endOf('week');
+          endDate = `${endOfWeek.format('MM/DD/yyyy')} 23:59:59`;
+        } else if (lastAccessFilter === 'Last Week') {
+          const today = moment();
+          const begginingOfCurrentWeek = today.startOf('week');
+          startDate = `${begginingOfCurrentWeek.format('MM/DD/yyyy')} 00:00:00`;
+          startDate = format(
+            Number(new Date(startDate).getTime() - 3600 * 24 * 7 * 1000),
+            'MM/dd/yyyy'
+          );
+          const endOfWeek = today.endOf('week');
+          endDate = `${endOfWeek.format('MM/DD/yyyy')} 23:59:59`;
+          endDate = format(Number(new Date(endDate).getTime() - 3600 * 24 * 7 * 1000), 'MM/dd/yyyy');
+        }
+
+        const sexValue = sexFilter !== 'All' ? sexFilter : '';
+        const kingdomValue = kingdomFilter !== 'All' ? kingdomFilter : '';
+        const speciesValue = speciesFilter !== 'All' ? speciesFilter : '';
+
+        let lists = [];
+        // if (idArray.length > 0) {
+        //   lists = await CustomerModel.find({
+        //     lastAccess: {$gt:new Date(startDate), $lt: new Date(endDate)},
+        //     _id: {$in: idArray},
+        //     bioSex: sexValue,
+        //     kingdom: kingdomValue,
+        //     species: speciesValue
+        //   })
+        //   .populate({
+        //     path:'projects', 
+        //     options:{sort:{'createdAt':'desc'}},
+        //     populate:[{
+        //         path:'sessions', 
+        //         options:{sort:{'createdAt':'desc'}},
+        //         populate:{path:'teamMembers'}
+        //       },
+        //       {
+        //         path:'coordinator'
+        //     }]
+        //   })
+        //   .populate('dailySurveys');
+        // } else {
+        lists = await CustomerModel.find(
+          {
+            lastAccess: {$gt:new Date(startDate), $lt: new Date(endDate)},
+            bioSex: sexValue !== '' ? {$eq: sexValue} : {$ne: sexValue},
+            kingdom: kingdomValue !== '' ? {$eq: kingdomValue} : {$ne: kingdomValue},
+            species: speciesValue !== '' ? {$eq: speciesValue} : {$ne: speciesValue},
+          }
+        )
         .populate({
           path:'projects', 
           options:{sort:{'createdAt':'desc'}},
@@ -29,7 +106,87 @@ const customerResolver = {
               path:'coordinator'
           }]
         })
-        .populate('dailySurveys');
+        .populate('dailySurveys')
+
+        if (condition.sort){
+          const sort = condition.sort;
+          if (sort.clientName){
+            if (sort.clientName === 'asc') {              
+              lists = lists.sort((a, b) => {
+                return a.firstName.localeCompare(b.firstName);
+              });
+            }else {
+              lists = lists.sort((a, b) => {
+                return b.firstName.localeCompare(a.firstName);
+              });
+            }
+          }
+          if (sort.lastaccess) {
+            if (sort.lastaccess === 'asc') {
+              lists = lists.sort((a, b) => {
+                return Number(a.lastAccess ? a.lastAccess : 0) - Number(b.lastAccess ? b.lastAccess : 0);
+              });
+            }else {
+              lists = lists.sort((a, b) => {
+                return Number(b.lastAccess ? b.lastAccess : 0) - Number(a.lastAccess ? a.lastAccess : 0);
+              });
+            }
+          }
+          if (sort.sex) {
+            if (sort.sex === 'asc') {
+              lists = lists.sort((a, b) => {
+                return a.bioSex.localeCompare(b.bioSex);
+              });
+            }else {
+              lists = lists.sort((a, b) => {
+                return b.bioSex.localeCompare(a.bioSex);
+              });
+            }
+          }
+          if (sort.kingdom) {
+            if (sort.kingdom === 'asc') {
+              lists = lists.sort((a, b) => {
+                return a.kingdom.localeCompare(b.kingdom);
+              });
+            }else {
+              lists = lists.sort((a, b) => {
+                return b.kingdom.localeCompare(a.kingdom);
+              });
+            }
+          }
+          if (sort.species) {
+            if (sort.species === 'asc') {
+              lists = lists.sort((a, b) => {
+                return a.species.localeCompare(b.species);
+              });
+            }else {
+              lists = lists.sort((a, b) => {
+                return b.species.localeCompare(a.species);
+              });
+            }
+          }
+          if (sort.performance){
+            if (sort.performance === 'asc') {
+
+            }else {
+
+            }
+          }
+          if (sort.quality) {
+            if (sort.quality === 'asc') {
+
+            }else {
+
+            }
+          }
+          if (sort.treatments){
+            if (sort.treatments === 'asc') {
+
+            }else {
+
+            }
+          }
+        }
         
         var pageNum:number = 0;
         if (_args.pageNum && _args.pageNum > 0) {

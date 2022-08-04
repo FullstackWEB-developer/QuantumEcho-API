@@ -67,9 +67,35 @@ type CustomerOperator {
     progress: Int
 }
 
+input FilterInput {
+    nameFilters: [String]
+    lastAccessFilter: String
+    performanceFilter: String
+    qualityFilter: String
+    sexFilter: String    
+    kingdomFilter: String    
+    speciesFilter: String
+}
+
+input CustomerSortInput {
+    clientName: String
+    lastaccess: String
+    performance: String
+    quality: String
+    treatments: String
+    sex: String
+    kingdom: String
+    species: String
+}
+
+input ConditionInput {
+    filters: FilterInput
+    sort: CustomerSortInput
+}
+
 type Query {
     customerCount : Int!
-    customers(condition:CustomerInput, pageNum:Int):CustomersResult
+    customers(condition:ConditionInput, pageNum:Int):CustomersResult
     customer(customerId: String!): Customer
     customerById(_id: ID!): Customer
     customerOperators(_id:String!, pageNum:Int):CustomerOperatorsResult

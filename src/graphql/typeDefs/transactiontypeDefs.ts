@@ -7,8 +7,10 @@ type Transaction{
 }
 
 input TransactionInput{
-    subscribs:String
-    operatorBuyer:String
+    subscribs: String
+    operatorBuyer: String
+    paymentIntentClientSecret: String
+    paymentIntent: String
 }
 
 type Query {

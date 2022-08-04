@@ -47,15 +47,21 @@ type SubscribResult{
     perCount:Int
 }
 
+type PaymentIntentResult {
+    client_secret: String
+}
+
 type Query {
     subscribCount : Int!
-    subscribs(condition:SubscribInput, pageNum:Int):SubscribResult
+    subscribs(condition:SubscribInput, pageNum:Int): SubscribResult
     subscrib(_id: ID!): Subscrib
 }
 
 type Mutation {
 
     postSubscrib(input: SubscribInput): Message
+
+    createPaymentIntent(subscribId: String!, buyerId: String, paymentType: String): PaymentIntentResult
     
     updateSubscrib(
         _id:ID!

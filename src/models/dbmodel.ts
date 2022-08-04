@@ -15,6 +15,7 @@ import treatmentSurvey from './treatmentSurvey';
 import moduleSelection from './moduleSelection';
 import resonanceGroup from './resonanceGroup';
 import resonanceSubGroup from './resonanceSubGroup';
+import stripeHistory from './stripehistory'
 
 export const AdminModel = getModelForClass(admin);
 export const CustomerModel = getModelForClass(customer);
@@ -33,3 +34,5 @@ export const TreatmentSurveyModel = getModelForClass(treatmentSurvey);
 export const ModuleSelectionModel = getModelForClass(moduleSelection);
 export const ResonanceGroupModel = getModelForClass(resonanceGroup);
 export const ResonanceSubGroupModel = getModelForClass(resonanceSubGroup);
+
+export const StripeHistoryModel = getModelForClass(stripeHistory);
