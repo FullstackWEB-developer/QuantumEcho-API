@@ -314,7 +314,7 @@ const customerResolver = {
             result = {message:"Successfully created.", _id:res._id};
           })
           .catch((error:any) => {
-            result = {message:error._message};
+            throw new Error(error._message);
           });
           return result;
         },
@@ -366,7 +366,7 @@ const customerResolver = {
             .then((result:any) => {
                 results = result;
             }).catch((error:any) => {
-              results = null;
+              throw new Error(error._message);
             });
             return results;
           }else{
@@ -376,7 +376,7 @@ const customerResolver = {
               results = result
             })
             .catch((error:any) => {
-              results = null;
+              throw new Error(error._message);
             });
             return results;
           }
@@ -426,7 +426,7 @@ const customerResolver = {
             .then((result:any) => {
                 results = result;
             }).catch((error:any) => {
-              results = null;
+              throw new Error(error._message);
             });
             return results;
           }else{
@@ -436,7 +436,7 @@ const customerResolver = {
               results = result
             })
             .catch((error:any) => {
-              results = null;
+              throw new Error(error._message);
             });
             return results;
           }
@@ -450,7 +450,7 @@ const customerResolver = {
               results = {message:"Successfully deleted."};              
           })
           .catch((error:any) => {
-              results = {message:error._message}
+            throw new Error(error._message);
           });
           return results;
         }

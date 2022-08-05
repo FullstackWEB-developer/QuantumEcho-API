@@ -77,6 +77,9 @@ export class Customer {
 
     @prop({ref: () => Project})
     public  projects? : Ref<Project>[];  
+
+    @prop({type:() => Boolean, default: false})
+    public paid?: boolean;
     
 }
 
