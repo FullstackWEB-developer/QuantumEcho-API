@@ -62,6 +62,7 @@ type Mutation {
     postSubscrib(input: SubscribInput): Message
 
     createPaymentIntent(subscribId: String!, buyerId: String, paymentType: String): PaymentIntentResult
+    createCustomerPaymentIntent(buyerId: String, paymentType: String): PaymentIntentResult
     
     updateSubscrib(
         _id:ID!

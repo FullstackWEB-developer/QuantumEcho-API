@@ -18,6 +18,7 @@ type Customer{
     projects:[Project]
     createdAt:String
     paid: Boolean
+    planType: String
 }
 
 input CustomerInput{
@@ -37,6 +38,7 @@ input CustomerInput{
     dailySurveys:[String]
     projects:[String]
     paid: Boolean
+    planType: String
 }
 
 type CustomersResult{

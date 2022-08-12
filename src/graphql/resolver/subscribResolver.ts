@@ -54,10 +54,34 @@ const subscribResolver = {
         const paymentIntent = await stripe.paymentIntents.create({
           amount: Number(subscriptionData.monthlyPrice) * 100,
           currency: "eur",
-          payment_method_types: ['card'],          
+          payment_method_types: ['card'],
+
         });
 
         await StripeHistoryModel.create({paymentId: paymentIntent.id, operatorId: buyerId, paymentIntentClientSecret: paymentIntent.client_secret});
+
+        return {client_secret: paymentIntent.client_secret};
+
+      },
+
+      async createCustomerPaymentIntent(_parent: any, _args: any, { headers }: any) {
+        await global.isAuthorization(headers);
+        const paymentType = _args.paymentType ? _args.paymentType : '';
+        const buyerId = _args.buyerId ? _args.buyerId : '';
+        let amount = 0;
+        if (paymentType === 'BasicPlan') {
+          amount = 1699;
+        } else if (paymentType === 'ProPlan') {
+          amount = 2999;
+        }
+        
+        const paymentIntent = await stripe.paymentIntents.create({
+          amount: amount,
+          currency: "eur",
+          payment_method_types: ['card'],
+        });
+
+        // await StripeHistoryModel.create({paymentId: paymentIntent.id, operatorId: buyerId, paymentIntentClientSecret: paymentIntent.client_secret});
 
         return {client_secret: paymentIntent.client_secret};
 

@@ -80,6 +80,9 @@ export class Customer {
 
     @prop({type:() => Boolean, default: false})
     public paid?: boolean;
+
+    @prop({type:() => String})
+    public planType?: string;
     
 }
 
